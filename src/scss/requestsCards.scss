@@ -1,0 +1,84 @@
+.requests__cards {
+  margin-top: 39px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.requests__cards-card{
+  height: 380px;
+  width: 220px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  background-color: #FFFFFF;
+  border-radius: 6px 6px 6px 6px;
+  text-decoration: none;
+  CURSOR: pointer;
+  border-color: white;
+  transition: 0.5s;
+  &--inactive{
+    display:none
+  }
+  &:hover{
+    border: 1px solid #208085;
+  }
+  &--reserve {
+    background: #208085;
+  }
+}
+
+.requests__cards-imgBlock{
+  position: relative;
+  height: 180px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 6px 6px 0 0;
+  img {
+    height: 100%;
+    width: 100%
+  }
+  &--reserve::before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0.0001) 100%);
+  }
+
+}
+
+.requests__cards-descr{
+  text-align: center;
+  padding-top: 20px
+}
+
+.requests__reserveText{
+  top: 8%;
+  left: 25%;
+  font-size: 18px;
+}
+
+.requests__bearName{
+  color: $color3F;
+  font-size: 18px;
+  margin-bottom: 9px;
+  &--reserve{
+    color: $colorReserveFF;
+    margin-bottom: 9px;
+  }
+}
+
+.requests__bearTypeNGender {
+  color: $color76;
+  font-size: 14px;
+  &--reserve{
+    color: $colorReserveE7;
+  }
+}
+
+.requests__cards-btns{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}

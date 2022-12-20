@@ -1,0 +1,55 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  font-family: generalFont;
+  font-style: normal;
+}
+
+body {
+  background-color: #F2F2F2;
+}
+
+.blur:before{
+  content: '';
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(40.7742px);
+  z-index: 1;
+}
+
+.bearName{
+  color: #3F3F3F;
+  &--reserve {color: #FFFFFF}
+}
+
+.bearTypeNGender {
+  color: #767676;
+  &--reserve {color: #E7E7E7;}
+}
+
+.reserveText {
+  position: absolute;
+  color: #58FFB5;
+}
+
+.btn--accept {
+  @include button;
+  background-color: #58FFB5;
+  color: #208085;
+  &:hover {
+    background-color: #FEED7E;
+  }
+}
+
+.btn--reject {
+  @include button;
+  background-color: #208085;
+  color: #FFFFFF;
+  &:hover{
+    background-color: #0E4447;
+  }
+  &--reserve {
+    border: 2px solid white;
+  }
+}

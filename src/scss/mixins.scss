@@ -1,0 +1,27 @@
+@mixin button {
+  width: 180px;
+  height: 32px;
+  margin-bottom: 10px;
+  border: 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+@mixin cross {
+  content: "";
+  position: fixed;
+  top: 1%;
+  left: 102%;
+  width: 25px;
+  height: 2px;
+  background: #FFFFFF;
+  transition: 0.5s
+}
+
+$colorRed: red;
+$color3F: #3F3F3F;
+$colorReserveFF: #FFFFFF;
+$color76: #767676;
+$colorReserveE7: #E7E7E7;

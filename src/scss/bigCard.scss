@@ -1,0 +1,116 @@
+.cardWrapper {
+  max-height: 100vh;
+}
+
+.bigCard{
+  position: fixed;
+  top: -130%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 460px;
+  transition: 0.5s;
+  z-index: 1;
+  &--active{
+    top: 30px
+  }
+}
+
+.cardDescr {
+  background: #FFFFFF;
+  border-radius: 6px;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  &--reserve {
+    background: #208085;
+  }
+}
+
+.cardDescr__imgBlock {
+  width: 100%;
+  height: 400px;
+  &--reserve {
+    position: relative;
+    &::before{
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0.0001) 100%)
+    }
+  }
+  img{
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.cardDescr__reserveText {
+  font-size: 24px;
+  left: 5%;
+  top: 5%
+}
+
+.cardDescr__bearsInfo {
+  padding: 20px 30px 30px 30px;
+  font-size: 13.2px;
+}
+
+.cardDescr__bearName{
+  color: $color3F;
+  font-size: 24px;
+  margin-bottom: 7px;
+  &--reserve{
+    font-size: 24px;
+    margin-bottom: 7px;
+    color: $colorReserveFF
+  }
+}
+
+.cardDescr__bearTypeNGender {
+  color: $color76;
+  font-size: 18px;
+  &--reserve{
+    color: $colorReserveE7;
+    font-size: 18px;
+  }
+}
+
+.cardDescr__bearsInfo-descr {
+  margin-top: 16px;
+  color: $color76;
+  &--reserve{
+    margin-top: 16px;
+    color: $colorReserveE7
+  }
+}
+
+.cardDescr__btns {
+  display: flex;
+  justify-content: space-around;
+}
+
+.cardClose {
+  position: absolute;
+  top: -0.5%;
+  left: 102%;
+  cursor: pointer;
+  width: 25px;
+  height: 25px;
+  &::before{
+    @include cross;
+    transform: rotate(45deg)
+  }
+  &::after{
+    @include cross;
+    transform: rotate(-45deg)
+  }
+  &:hover::before{
+    transform: rotate(-45deg);
+    background: indianred
+  }
+  &:hover::after {
+    transform: rotate(-135deg);
+    background: indianred
+  }
+}
