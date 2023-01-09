@@ -59,6 +59,19 @@
 .requests__filter {
   position: relative;
   display: inline-block;
+  &-node {
+    color: #454545;
+    padding: 10px 10px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    &:hover{
+      background-color: #FEED7E;
+    }
+    &--active {
+      background-color: #FEED7E
+    }
+  }
 }
 
 .requests__filter-button{
@@ -104,15 +117,5 @@
   z-index: 1;
   &--active {
     display: block;
-  }
-  a {
-    color: #454545;
-    padding: 10px 10px;
-    text-decoration: none;
-    display: block;
-    font-size: 14px;
-    &:hover{
-      background-color: #FEED7E;
-    }
   }
 }

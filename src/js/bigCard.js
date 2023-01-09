@@ -1,9 +1,9 @@
-import {buttons} from "./Buttons";
+import {bearsArr} from "./fetchData";
 
 const structureBigCard = (item) => `
     ${item.in_reserve
     ?
-    `<div class="cardWrapper" id="big${item.id}">
+    `<div class="cardWrapper">
         <section class="cardDescr cardDescr--reserve">
             <div class="cardDescr__imgBlock cardDescr__imgBlock--reserve">
                 <div class="reserveText cardDescr__reserveText">В заповеднике</div>
@@ -24,7 +24,7 @@ const structureBigCard = (item) => `
         <div class="cardClose"></div>
     </div>`
     :
-    `<div class="cardWrapper" id="big${item.id}">
+    `<div class="cardWrapper">
         <section class="cardDescr">
             <div class="cardDescr__imgBlock">
                 <img src=${item.image_url} alt="#">
@@ -47,13 +47,10 @@ const structureBigCard = (item) => `
 
 const bigCard = document.querySelector('.bigCard')
 export function renderBigCard(item){
-    document.getElementById(item.id).querySelector('.requests__cards-imgBlock')
-        .addEventListener('click', () => {
-            bigCard.innerHTML = structureBigCard(item)
-            bigCard.classList.add('bigCard--active')
-            document.body.classList.add('blur')
-            closeOnButton()
-        })
+    bigCard.innerHTML = structureBigCard(item)
+    bigCard.classList.add('bigCard--active')
+    document.body.classList.add('blur')
+    closeOnButton()
 }
 
 function closeOnButton(){

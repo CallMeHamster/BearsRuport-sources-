@@ -49,10 +49,11 @@ __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerat
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "bigButtons": () => (/* binding */ bigButtons),
 /* harmony export */   "buttons": () => (/* binding */ buttons)
 /* harmony export */ });
 function buttons(item, section) {
-  var button = document.getElementById(item.id).querySelectorAll('button');
+  var button = item.node.querySelectorAll('button');
   var buttonAccept = button[0];
   var buttonReject = button[1];
   buttonAccept.addEventListener('click', function () {
@@ -61,7 +62,7 @@ function buttons(item, section) {
       method: 'POST',
       body: JSON.stringify(item.id)
     });
-    section.removeChild(document.getElementById(item.id));
+    section.removeChild(item.node);
   });
   buttonReject.addEventListener('click', function () {
     item.state = 'rejected';
@@ -69,7 +70,132 @@ function buttons(item, section) {
       method: 'POST',
       body: JSON.stringify(item.id)
     });
-    section.removeChild(document.getElementById(item.id));
+    section.removeChild(item.node);
+  });
+}
+function bigButtons(item, section) {
+  var button = document.querySelector('.cardDescr').querySelectorAll('button');
+  var bigCard = document.querySelector('.bigCard');
+  var buttonAccept = button[0];
+  var buttonReject = button[1];
+  buttonAccept.addEventListener('click', function () {
+    item.state = 'accepted';
+    fetch('https://private-9d5e37a-testassignment.apiary-mock.com/resolve-bear', {
+      method: 'POST',
+      body: JSON.stringify(item.id)
+    });
+    section.removeChild(item.node);
+    bigCard.classList.remove('bigCard--active');
+    document.body.classList.remove('blur');
+  });
+  buttonReject.addEventListener('click', function () {
+    item.state = 'rejected';
+    fetch('https://private-9d5e37a-testassignment.apiary-mock.com/reject-bear', {
+      method: 'POST',
+      body: JSON.stringify(item.id)
+    });
+    section.removeChild(item.node);
+    bigCard.classList.remove('bigCard--active');
+    document.body.classList.remove('blur');
+  });
+}
+
+/***/ }),
+
+/***/ "./src/js/acceptReject.js":
+/*!********************************!*\
+  !*** ./src/js/acceptReject.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "acceptedFilter": () => (/* binding */ acceptedFilter),
+/* harmony export */   "rejectedFilter": () => (/* binding */ rejectedFilter)
+/* harmony export */ });
+/* harmony import */ var _fetchData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fetchData */ "./src/js/fetchData.js");
+/* harmony import */ var _usualCard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./usualCard */ "./src/js/usualCard.js");
+/* harmony import */ var _reRender__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./reRender */ "./src/js/reRender.js");
+/* harmony import */ var _bigCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./bigCard */ "./src/js/bigCard.js");
+
+
+
+
+var accepted = document.querySelector('.requests__filter--accepted');
+var rejected = document.querySelector('.requests__filter--rejected');
+function acceptedFilter() {
+  accepted.addEventListener('click', function () {
+    document.querySelector('.requests__checkbox').classList.remove('requests__checkbox--active');
+    document.querySelector('.requests__checkmark').classList.remove('requests__checkmark--active');
+    var requests = document.querySelector('.requests__cards');
+    if (!accepted.classList.contains("requests__filter-node--active") && !rejected.classList.contains("requests__filter-node--active") || !accepted.classList.contains('requests__filter-node--active') && rejected.classList.contains('requests__filter-node--active')) {
+      accepted.classList.add("requests__filter-node--active");
+      rejected.classList.remove('requests__filter-node--active');
+      var acceptedBears = _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
+        return item.state === 'accepted';
+      });
+      var structure = acceptedBears.reduce(function (acc, item) {
+        return acc + (0,_usualCard__WEBPACK_IMPORTED_MODULE_1__.structureCard)(item);
+      }, '');
+      requests.innerHTML = structure;
+      var nodes = document.querySelectorAll('.requests__cards-card');
+      var i = 0;
+      acceptedBears.forEach(function (item) {
+        item.node = nodes[i];
+        item.node.querySelector('.requests__cards-imgBlock').addEventListener('click', function () {
+          (0,_bigCard__WEBPACK_IMPORTED_MODULE_3__.renderBigCard)(item);
+        });
+        i++;
+      });
+    } else {
+      var _structure = _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
+        return !item.state;
+      }).reduce(function (acc, item) {
+        return acc + (0,_usualCard__WEBPACK_IMPORTED_MODULE_1__.structureCard)(item);
+      }, '');
+      requests.innerHTML = _structure;
+      accepted.classList.remove("requests__filter-node--active");
+      rejected.classList.remove("requests__filter-node--active");
+      (0,_reRender__WEBPACK_IMPORTED_MODULE_2__.reRender)();
+    }
+  });
+}
+function rejectedFilter() {
+  rejected.addEventListener('click', function () {
+    document.querySelector('.requests__checkbox').classList.remove('requests__checkbox--active');
+    document.querySelector('.requests__checkmark').classList.remove('requests__checkmark--active');
+    var requests = document.querySelector('.requests__cards');
+    if (!rejected.classList.contains("requests__filter-node--active") && !accepted.classList.contains("requests__filter-node--active") || !rejected.classList.contains('requests__filter-node--active') && accepted.classList.contains('requests__filter-node--active')) {
+      rejected.classList.add("requests__filter-node--active");
+      accepted.classList.remove('requests__filter-node--active');
+      var rejectedBears = _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
+        return item.state === 'rejected';
+      });
+      var structure = rejectedBears.reduce(function (acc, item) {
+        return acc + (0,_usualCard__WEBPACK_IMPORTED_MODULE_1__.structureCard)(item);
+      }, '');
+      requests.innerHTML = structure;
+      var nodes = document.querySelectorAll('.requests__cards-card');
+      var i = 0;
+      rejectedBears.forEach(function (item) {
+        item.node = nodes[i];
+        item.node.querySelector('.requests__cards-imgBlock').addEventListener('click', function () {
+          (0,_bigCard__WEBPACK_IMPORTED_MODULE_3__.renderBigCard)(item);
+        });
+        i++;
+      });
+    } else {
+      var _structure2 = _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
+        return !item.state;
+      }).reduce(function (acc, item) {
+        return acc + (0,_usualCard__WEBPACK_IMPORTED_MODULE_1__.structureCard)(item);
+      }, '');
+      requests.innerHTML = _structure2;
+      rejected.classList.remove("requests__filter-node--active");
+      accepted.classList.remove("requests__filter-node--active");
+      (0,_reRender__WEBPACK_IMPORTED_MODULE_2__.reRender)();
+    }
   });
 }
 
@@ -86,19 +212,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "renderBigCard": () => (/* binding */ renderBigCard)
 /* harmony export */ });
-/* harmony import */ var _Buttons__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Buttons */ "./src/js/Buttons.js");
+/* harmony import */ var _fetchData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fetchData */ "./src/js/fetchData.js");
 
 var structureBigCard = function structureBigCard(item) {
-  return "\n    ".concat(item.in_reserve ? "<div class=\"cardWrapper\" id=\"big".concat(item.id, "\">\n        <section class=\"cardDescr cardDescr--reserve\">\n            <div class=\"cardDescr__imgBlock cardDescr__imgBlock--reserve\">\n                <div class=\"reserveText cardDescr__reserveText\">\u0412 \u0437\u0430\u043F\u043E\u0432\u0435\u0434\u043D\u0438\u043A\u0435</div>\n                <img src=").concat(item.image_url, " alt=\"#\">\n            </div>\n            <div class=\"cardDescr__bearsInfo\">\n                <div class=\"cardDescr__bearName--reserve\">").concat(item.name, "</div>\n                <div class=\"cardDescr__bearTypeNGender--reserve\">").concat(item.type, "</div>\n                <div class=\"cardDescr__bearTypeNGender--reserve\">").concat(item.gender, "</div>\n                <div class=\"cardDescr__bearsInfo-descr--reserve\">").concat(item.text || '...', "</div>\n            </div>\n            ").concat(item.state ? '' : "\n            <div class=\"cardDescr__btns\">\n                <button class=\"btn--accept\">\u041F\u0440\u0438\u043D\u044F\u0442\u044C</button>\n                <button class=\"btn--reject btn--reject--reserve\">\u041E\u0442\u043A\u043B\u043E\u043D\u0438\u0442\u044C</button>\n            </div>", "\n        </section>\n        <div class=\"cardClose\"></div>\n    </div>") : "<div class=\"cardWrapper\" id=\"big".concat(item.id, "\">\n        <section class=\"cardDescr\">\n            <div class=\"cardDescr__imgBlock\">\n                <img src=").concat(item.image_url, " alt=\"#\">\n            </div>\n            <div class=\"cardDescr__bearsInfo\">\n                <div class=\"bearName cardDescr__bearName\">").concat(item.name, "</div>\n                <div class=\"bearTypeNGender cardDescr__bearTypeNGender\">").concat(item.type, "</div>\n                <div class=\"bearTypeNGender cardDescr__bearTypeNGender\">").concat(item.gender, "</div>\n                <div class=\"cardDescr__bearsInfo-descr\">").concat(item.text || '...', "</div>\n            </div>\n            ").concat(item.state ? '' : "\n            <div class=\"cardDescr__btns\">\n                <button class=\"btn--accept\">\u041F\u0440\u0438\u043D\u044F\u0442\u044C</button>\n                <button class=\"btn--reject\">\u041E\u0442\u043A\u043B\u043E\u043D\u0438\u0442\u044C</button>\n            </div>", "\n        </section>\n        <div class=\"cardClose\"></div>\n    </div>"));
+  return "\n    ".concat(item.in_reserve ? "<div class=\"cardWrapper\">\n        <section class=\"cardDescr cardDescr--reserve\">\n            <div class=\"cardDescr__imgBlock cardDescr__imgBlock--reserve\">\n                <div class=\"reserveText cardDescr__reserveText\">\u0412 \u0437\u0430\u043F\u043E\u0432\u0435\u0434\u043D\u0438\u043A\u0435</div>\n                <img src=".concat(item.image_url, " alt=\"#\">\n            </div>\n            <div class=\"cardDescr__bearsInfo\">\n                <div class=\"cardDescr__bearName--reserve\">").concat(item.name, "</div>\n                <div class=\"cardDescr__bearTypeNGender--reserve\">").concat(item.type, "</div>\n                <div class=\"cardDescr__bearTypeNGender--reserve\">").concat(item.gender, "</div>\n                <div class=\"cardDescr__bearsInfo-descr--reserve\">").concat(item.text || '...', "</div>\n            </div>\n            ").concat(item.state ? '' : "\n            <div class=\"cardDescr__btns\">\n                <button class=\"btn--accept\">\u041F\u0440\u0438\u043D\u044F\u0442\u044C</button>\n                <button class=\"btn--reject btn--reject--reserve\">\u041E\u0442\u043A\u043B\u043E\u043D\u0438\u0442\u044C</button>\n            </div>", "\n        </section>\n        <div class=\"cardClose\"></div>\n    </div>") : "<div class=\"cardWrapper\">\n        <section class=\"cardDescr\">\n            <div class=\"cardDescr__imgBlock\">\n                <img src=".concat(item.image_url, " alt=\"#\">\n            </div>\n            <div class=\"cardDescr__bearsInfo\">\n                <div class=\"bearName cardDescr__bearName\">").concat(item.name, "</div>\n                <div class=\"bearTypeNGender cardDescr__bearTypeNGender\">").concat(item.type, "</div>\n                <div class=\"bearTypeNGender cardDescr__bearTypeNGender\">").concat(item.gender, "</div>\n                <div class=\"cardDescr__bearsInfo-descr\">").concat(item.text || '...', "</div>\n            </div>\n            ").concat(item.state ? '' : "\n            <div class=\"cardDescr__btns\">\n                <button class=\"btn--accept\">\u041F\u0440\u0438\u043D\u044F\u0442\u044C</button>\n                <button class=\"btn--reject\">\u041E\u0442\u043A\u043B\u043E\u043D\u0438\u0442\u044C</button>\n            </div>", "\n        </section>\n        <div class=\"cardClose\"></div>\n    </div>"));
 };
 var bigCard = document.querySelector('.bigCard');
 function renderBigCard(item) {
-  document.getElementById(item.id).querySelector('.requests__cards-imgBlock').addEventListener('click', function () {
-    bigCard.innerHTML = structureBigCard(item);
-    bigCard.classList.add('bigCard--active');
-    document.body.classList.add('blur');
-    closeOnButton();
-  });
+  bigCard.innerHTML = structureBigCard(item);
+  bigCard.classList.add('bigCard--active');
+  document.body.classList.add('blur');
+  closeOnButton();
 }
 function closeOnButton() {
   document.querySelector('.cardClose').addEventListener('click', function () {
@@ -178,93 +302,63 @@ function _getBearsData() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "filterContentDrop": () => (/* binding */ filterContentDrop),
-/* harmony export */   "filterDrop": () => (/* binding */ filterDrop),
-/* harmony export */   "filterForAcceptReject": () => (/* binding */ filterForAcceptReject)
+/* harmony export */   "filterDrop": () => (/* binding */ filterDrop)
 /* harmony export */ });
 /* harmony import */ var _fetchData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fetchData */ "./src/js/fetchData.js");
 /* harmony import */ var _usualCard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./usualCard */ "./src/js/usualCard.js");
-/* harmony import */ var _bigCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./bigCard */ "./src/js/bigCard.js");
-/* harmony import */ var _Buttons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Buttons */ "./src/js/Buttons.js");
-
+/* harmony import */ var _reRender__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./reRender */ "./src/js/reRender.js");
 
 
 
 function filterDrop() {
   var checkBox = document.querySelector('.requests__checkbox');
+  var requests = document.querySelector('.requests__cards');
+  var accepted = document.querySelector('.requests__filter--accepted');
+  var rejected = document.querySelector('.requests__filter--rejected');
   checkBox.addEventListener('click', function () {
-    document.querySelector('.requests__checkmark').classList.toggle('requests__checkmark--active');
-    var requestsCards = document.querySelector('.requests__cards');
-    if (!checkBox.classList.contains('requests__checkbox--active')) {
-      if (requestsCards.classList.contains('requests__cards--accepted')) {
-        _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
-          return item.state === 'accepted';
-        }).forEach(function (item) {
-          if (!item.in_reserve) {
-            var noReserveBear = document.getElementById(item.id);
-            requestsCards.removeChild(noReserveBear);
-          }
-        });
-        checkBox.classList.add('requests__checkbox--active');
-      }
-      if (requestsCards.classList.contains('requests__cards--rejected')) {
-        _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
-          return item.state === 'rejected';
-        }).forEach(function (item) {
-          if (!item.in_reserve) {
-            var noReserveBear = document.getElementById(item.id);
-            requestsCards.removeChild(noReserveBear);
-          }
-        });
-        checkBox.classList.add('requests__checkbox--active');
-      }
-      if (!requestsCards.classList.contains('requests__cards--accepted') && !requestsCards.classList.contains('requests__cards--rejected')) {
-        _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
-          return !item.state;
-        }).forEach(function (item) {
-          if (!item.in_reserve) {
-            var noReserveBear = document.getElementById(item.id);
-            requestsCards.removeChild(noReserveBear);
-          }
-        });
-        checkBox.classList.add('requests__checkbox--active');
-      }
+    var checkMark = document.querySelector('.requests__checkmark');
+    if (!checkMark.classList.contains('requests__checkmark--active')) {
+      checkBox.classList.add('requests__checkbox--active');
+      checkMark.classList.add('requests__checkmark--active');
+      var allBears = document.querySelectorAll('.requests__cards-card');
+      var reserveBears = document.querySelectorAll('.requests__cards-card--reserve');
+      allBears.forEach(function (item) {
+        return requests.removeChild(item);
+      });
+      reserveBears.forEach(function (item) {
+        return requests.appendChild(item);
+      });
+
+      /*bearsArr.filter(item => !item.in_reserve && !item.state).forEach(item => {
+          requests.removeChild(item.node)
+      })*/
     } else {
-      if (requestsCards.classList.contains('requests__cards--accepted')) {
-        var acceptedBears = _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
-          return item.state === 'accepted';
-        });
-        requestsCards.innerHTML = acceptedBears.reduce(function (acc, item) {
-          return acc + (0,_usualCard__WEBPACK_IMPORTED_MODULE_1__.structureCard)(item);
-        }, '');
-        acceptedBears.forEach(function (item) {
-          return (0,_bigCard__WEBPACK_IMPORTED_MODULE_2__.renderBigCard)(item);
-        });
-        checkBox.classList.remove('requests__checkbox--active');
-      }
-      if (requestsCards.classList.contains('requests__cards--rejected')) {
-        var rejectedBears = _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
-          return item.state === 'rejected';
-        });
-        requestsCards.innerHTML = rejectedBears.reduce(function (acc, item) {
-          return acc + (0,_usualCard__WEBPACK_IMPORTED_MODULE_1__.structureCard)(item);
-        }, '');
-        rejectedBears.forEach(function (item) {
-          return (0,_bigCard__WEBPACK_IMPORTED_MODULE_2__.renderBigCard)(item);
-        });
-        checkBox.classList.remove('requests__checkbox--active');
-      }
-      if (!requestsCards.classList.contains('requests__cards--accepted') && !requestsCards.classList.contains('requests__cards--rejected')) {
-        var bears = _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
+      checkMark.classList.remove('requests__checkmark--active');
+      checkBox.classList.remove('requests__checkbox--active');
+      if (!accepted.classList.contains('requests__filter-node--active') && !rejected.classList.contains('requests__filter-node--active')) {
+        var structure = _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
           return !item.state;
-        });
-        requestsCards.innerHTML = bears.reduce(function (acc, item) {
+        }).reduce(function (acc, item) {
           return acc + (0,_usualCard__WEBPACK_IMPORTED_MODULE_1__.structureCard)(item);
         }, '');
-        bears.forEach(function (item) {
-          (0,_Buttons__WEBPACK_IMPORTED_MODULE_3__.buttons)(item, requestsCards);
-          (0,_bigCard__WEBPACK_IMPORTED_MODULE_2__.renderBigCard)(item);
-        });
-        checkBox.classList.remove('requests__checkbox--active');
+        requests.innerHTML = structure;
+        (0,_reRender__WEBPACK_IMPORTED_MODULE_2__.reRender)();
+      } else if (accepted.classList.contains('requests__filter-node--active') && !rejected.classList.contains('requests__filter-node--active')) {
+        var _structure = _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
+          return item.state === 'accepted';
+        }).reduce(function (acc, item) {
+          return acc + (0,_usualCard__WEBPACK_IMPORTED_MODULE_1__.structureCard)(item);
+        }, '');
+        requests.innerHTML = _structure;
+        (0,_reRender__WEBPACK_IMPORTED_MODULE_2__.reRender)();
+      } else {
+        var _structure2 = _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
+          return item.state === 'rejected';
+        }).reduce(function (acc, item) {
+          return acc + (0,_usualCard__WEBPACK_IMPORTED_MODULE_1__.structureCard)(item);
+        }, '');
+        requests.innerHTML = _structure2;
+        (0,_reRender__WEBPACK_IMPORTED_MODULE_2__.reRender)();
       }
     }
   });
@@ -276,84 +370,68 @@ function filterContentDrop() {
     document.querySelector('.requests__button-arrow').classList.toggle('requests__button-arrow--active');
   });
 }
-function backToStart(section) {
-  section.innerHTML = _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
-    return !item.state;
-  }).reduce(function (acc, item) {
-    return acc + (0,_usualCard__WEBPACK_IMPORTED_MODULE_1__.structureCard)(item);
-  }, '');
-  _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
-    return !item.state;
-  }).forEach(function (item) {
-    (0,_bigCard__WEBPACK_IMPORTED_MODULE_2__.renderBigCard)(item);
-    (0,_Buttons__WEBPACK_IMPORTED_MODULE_3__.buttons)(item, section);
-  });
-}
-function filterForAcceptReject(section) {
-  var acceptedBears = document.querySelector('.requests__filter--accepted');
-  var rejectedBears = document.querySelector('.requests__filter--rejected');
-  acceptedBears.addEventListener('click', function () {
-    if (section.classList.contains('requests__cards--accepted')) {
-      acceptedBears.style.background = '';
-      backToStart(section);
-      section.classList.remove('requests__cards--accepted');
-      document.querySelector('.requests__checkmark').classList.remove('requests__checkmark--active');
-      document.querySelector('.requests__checkbox').classList.remove('requests__checkbox--active');
-    } else {
-      if (section.classList.contains('requests__cards--rejected')) {
-        rejectedBears.style.background = '';
-        section.classList.remove('requests__cards--rejected');
-        document.querySelector('.requests__checkmark').classList.remove('requests__checkmark--active');
-        document.querySelector('.requests__checkbox').classList.remove('requests__checkbox--active');
-      }
-      document.querySelector('.requests__checkmark').classList.remove('requests__checkmark--active');
-      document.querySelector('.requests__checkbox').classList.remove('requests__checkbox--active');
-      acceptedBears.style.background = '#FEED7E';
-      section.classList.add('requests__cards--accepted');
-      var accepted = _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
-        return item.state === 'accepted';
-      });
-      var acceptedStructure = accepted.reduce(function (acc, item) {
-        return acc + (0,_usualCard__WEBPACK_IMPORTED_MODULE_1__.structureCard)(item);
-      }, '');
-      section.innerHTML = acceptedStructure;
-      accepted.forEach(function (item) {
-        return (0,_bigCard__WEBPACK_IMPORTED_MODULE_2__.renderBigCard)(item);
-      });
-    }
-  });
-  rejectedBears.addEventListener('click', function () {
-    if (section.classList.contains('requests__cards--rejected')) {
-      rejectedBears.style.background = '';
-      backToStart(section);
-      section.classList.remove('requests__cards--rejected');
-      document.querySelector('.requests__checkmark').classList.remove('requests__checkmark--active');
-      document.querySelector('.requests__checkbox').classList.remove('requests__checkbox--active');
-    } else {
-      if (section.classList.contains('requests__cards--accepted')) {
-        acceptedBears.style.background = '';
-        section.classList.remove('requests__cards--accepted');
-        document.querySelector('.requests__checkmark').classList.remove('requests__checkmark--active');
-        document.querySelector('.requests__checkbox').classList.remove('requests__checkbox--active');
-      }
-      document.querySelector('.requests__checkmark').classList.remove('requests__checkmark--active');
-      document.querySelector('.requests__checkbox').classList.remove('requests__checkbox--active');
-      rejectedBears.style.background = '#FEED7E';
-      section.classList.add('requests__cards--rejected');
-      var rejected = _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
-        return item.state === 'rejected';
-      });
-      var rejectedStructure = rejected.reduce(function (acc, item) {
-        return acc + (0,_usualCard__WEBPACK_IMPORTED_MODULE_1__.structureCard)(item);
-      }, '');
-      section.innerHTML = rejectedStructure;
-      rejected.forEach(function (item) {
-        return (0,_bigCard__WEBPACK_IMPORTED_MODULE_2__.renderBigCard)(item);
-      });
-    }
-  });
-}
 
+
+/***/ }),
+
+/***/ "./src/js/reRender.js":
+/*!****************************!*\
+  !*** ./src/js/reRender.js ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "reRender": () => (/* binding */ reRender)
+/* harmony export */ });
+/* harmony import */ var _fetchData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fetchData */ "./src/js/fetchData.js");
+/* harmony import */ var _bigCard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./bigCard */ "./src/js/bigCard.js");
+/* harmony import */ var _Buttons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Buttons */ "./src/js/Buttons.js");
+
+
+
+
+function reRender() {
+  var nodes = document.querySelectorAll('.requests__cards-card');
+  var requests = document.querySelector('.requests__cards');
+  var accepted = document.querySelector('.requests__filter--accepted');
+  var rejected = document.querySelector('.requests__filter--rejected');
+  var i = 0;
+  if (!accepted.classList.contains('requests__filter-node--active') && !rejected.classList.contains('requests__filter-node--active')) {
+    _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
+      return !item.state;
+    }).forEach(function (item) {
+      item.node = nodes[i];
+      item.node.querySelector('.requests__cards-imgBlock').addEventListener('click', function () {
+        (0,_bigCard__WEBPACK_IMPORTED_MODULE_1__.renderBigCard)(item);
+        (0,_Buttons__WEBPACK_IMPORTED_MODULE_2__.bigButtons)(item, requests);
+      });
+      (0,_Buttons__WEBPACK_IMPORTED_MODULE_2__.buttons)(item, requests);
+      i++;
+    });
+  } else if (accepted.classList.contains('requests__filter-node--active') && !rejected.classList.contains('requests__filter-node--active')) {
+    _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
+      return item.state === 'accepted';
+    }).forEach(function (item) {
+      item.node = nodes[i];
+      item.node.querySelector('.requests__cards-imgBlock').addEventListener('click', function () {
+        (0,_bigCard__WEBPACK_IMPORTED_MODULE_1__.renderBigCard)(item);
+      });
+      i++;
+    });
+  } else {
+    _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.filter(function (item) {
+      return item.state === 'rejected';
+    }).forEach(function (item) {
+      item.node = nodes[i];
+      item.node.querySelector('.requests__cards-imgBlock').addEventListener('click', function () {
+        (0,_bigCard__WEBPACK_IMPORTED_MODULE_1__.renderBigCard)(item);
+      });
+      i++;
+    });
+  }
+}
 
 /***/ }),
 
@@ -372,7 +450,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fetchData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fetchData */ "./src/js/fetchData.js");
 
 var structureCard = function structureCard(item) {
-  return "\n    ".concat(item.in_reserve ? "<div id = \"".concat(item.id, "\" class=\"requests__cards-card requests__cards-card--reserve\">\n        <div class=\"requests__cards-imgBlock requests__cards-imgBlock--reserve\">\n            <div class=\"reserveText requests__reserveText\">\u0412 \u0437\u0430\u043F\u043E\u0432\u0435\u0434\u043D\u0438\u043A\u0435</div>\n            <img src=").concat(item.image_url, " alt=\"#\">\n        </div>\n        <div class=\"requests__cards-descr\">\n            <div class=\"requests__bearName--reserve\">").concat(item.name, "</div> \n            <div class=\"requests__bearTypeNGender--reserve\">").concat(item.type, "</div>\n            <div class=\"requests__bearTypeNGender--reserve\">").concat(item.gender, "</div>\n        </div>\n        ").concat(item.state ? '' : "\n        <div class=\"requests__cards-btns\">\n            <button class=\"btn--accept\">\u041F\u0440\u0438\u043D\u044F\u0442\u044C</button>\n            <button class=\"btn--reject btn--reject--reserve\">\u041E\u0442\u043A\u043B\u043E\u043D\u0438\u0442\u044C</button>\n        </div>", "\n    </div>") : "<div id = \"".concat(item.id, "\" class=\"requests__cards-card \">\n        <div class=\"requests__cards-imgBlock\">\n            <img src=").concat(item.image_url, " alt=\"#\">\n        </div>\n        <div class=\"requests__cards-descr\">\n            <div class=\"requests__bearName\">").concat(item.name, "</div> \n            <div class=\"requests__bearTypeNGender\">").concat(item.type, "</div>\n            <div class=\"requests__bearTypeNGender\">").concat(item.gender, "</div>\n        </div>\n        ").concat(item.state ? '' : "\n        <div class=\"requests__cards-btns\">\n            <button class=\"btn--accept\">\u041F\u0440\u0438\u043D\u044F\u0442\u044C</button>\n            <button class=\"btn--reject\">\u041E\u0442\u043A\u043B\u043E\u043D\u0438\u0442\u044C</button>\n        </div>", "\n    </div>"));
+  return "\n    ".concat(item.in_reserve ? "<div class=\"requests__cards-card requests__cards-card--reserve\">\n        <div class=\"requests__cards-imgBlock requests__cards-imgBlock--reserve\">\n            <div class=\"reserveText requests__reserveText\">\u0412 \u0437\u0430\u043F\u043E\u0432\u0435\u0434\u043D\u0438\u043A\u0435</div>\n            <img src=".concat(item.image_url, " alt=\"#\">\n        </div>\n        <div class=\"requests__cards-descr\">\n            <div class=\"requests__bearName--reserve\">").concat(item.name, "</div> \n            <div class=\"requests__bearTypeNGender--reserve\">").concat(item.type, "</div>\n            <div class=\"requests__bearTypeNGender--reserve\">").concat(item.gender, "</div>\n        </div>\n        ").concat(item.state ? '' : "\n        <div class=\"requests__cards-btns\">\n            <button class=\"btn--accept\">\u041F\u0440\u0438\u043D\u044F\u0442\u044C</button>\n            <button class=\"btn--reject btn--reject--reserve\">\u041E\u0442\u043A\u043B\u043E\u043D\u0438\u0442\u044C</button>\n        </div>", "\n    </div>") : "<div class=\"requests__cards-card\">\n        <div class=\"requests__cards-imgBlock\">\n            <img src=".concat(item.image_url, " alt=\"#\">\n        </div>\n        <div class=\"requests__cards-descr\">\n            <div class=\"requests__bearName\">").concat(item.name, "</div> \n            <div class=\"requests__bearTypeNGender\">").concat(item.type, "</div>\n            <div class=\"requests__bearTypeNGender\">").concat(item.gender, "</div>\n        </div>\n        ").concat(item.state ? '' : "\n        <div class=\"requests__cards-btns\">\n            <button class=\"btn--accept\">\u041F\u0440\u0438\u043D\u044F\u0442\u044C</button>\n            <button class=\"btn--reject\">\u041E\u0442\u043A\u043B\u043E\u043D\u0438\u0442\u044C</button>\n        </div>", "\n    </div>"));
 };
 function renderCard() {
   var myCards = _fetchData__WEBPACK_IMPORTED_MODULE_0__.bearsArr.reduce(function (acc, item) {
@@ -9466,7 +9544,7 @@ var ___CSS_LOADER_URL_IMPORT_0___ = new URL(/* asset import */ __webpack_require
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 var ___CSS_LOADER_URL_REPLACEMENT_0___ = _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default()(___CSS_LOADER_URL_IMPORT_0___);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "@font-face {\n  font-family: generalFont;\n  src: url(" + ___CSS_LOADER_URL_REPLACEMENT_0___ + ");\n}\n* {\n  box-sizing: border-box;\n  margin: 0;\n  font-family: generalFont;\n  font-style: normal;\n}\n\nbody {\n  background-color: #F2F2F2;\n}\n\n.blur:before {\n  content: \"\";\n  position: fixed;\n  width: 100%;\n  height: 100%;\n  -webkit-backdrop-filter: blur(40.7742px);\n          backdrop-filter: blur(40.7742px);\n  z-index: 1;\n}\n\n.bearName {\n  color: #3F3F3F;\n}\n.bearName--reserve {\n  color: #FFFFFF;\n}\n\n.bearTypeNGender {\n  color: #767676;\n}\n.bearTypeNGender--reserve {\n  color: #E7E7E7;\n}\n\n.reserveText {\n  position: absolute;\n  color: #58FFB5;\n}\n\n.btn--accept {\n  width: 180px;\n  height: 32px;\n  margin-bottom: 10px;\n  border: 16px;\n  border-radius: 16px;\n  font-size: 14px;\n  transition: 0.3s;\n  cursor: pointer;\n  background-color: #58FFB5;\n  color: #208085;\n}\n.btn--accept:hover {\n  background-color: #FEED7E;\n}\n\n.btn--reject {\n  width: 180px;\n  height: 32px;\n  margin-bottom: 10px;\n  border: 16px;\n  border-radius: 16px;\n  font-size: 14px;\n  transition: 0.3s;\n  cursor: pointer;\n  background-color: #208085;\n  color: #FFFFFF;\n}\n.btn--reject:hover {\n  background-color: #0E4447;\n}\n.btn--reject--reserve {\n  border: 2px solid white;\n}\n\nheader {\n  padding-top: 13px;\n  padding-left: 130px;\n  height: 60px;\n  background-color: #0E4447;\n}\nheader img {\n  display: inline-block;\n}\n\n.header__text {\n  display: inline-block;\n  position: absolute;\n  color: #F4F4F4;\n  margin-left: 12px;\n  font-size: 24px;\n}\n\n.requests {\n  min-height: calc(100vh - 100px);\n}\n\n.container {\n  display: flex;\n  flex-wrap: wrap;\n  padding: 42px 240px 0 240px;\n}\n\n.requests__cards {\n  margin-top: 39px;\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: center;\n}\n\n.requests__cards-card {\n  height: 380px;\n  width: 220px;\n  margin-right: 20px;\n  margin-bottom: 20px;\n  background-color: #FFFFFF;\n  border-radius: 6px 6px 6px 6px;\n  text-decoration: none;\n  CURSOR: pointer;\n  border-color: white;\n  transition: 0.5s;\n}\n.requests__cards-card--inactive {\n  display: none;\n}\n.requests__cards-card:hover {\n  border: 1px solid #208085;\n}\n.requests__cards-card--reserve {\n  background: #208085;\n}\n\n.requests__cards-imgBlock {\n  position: relative;\n  height: 180px;\n  width: 100%;\n  overflow: hidden;\n  border-radius: 6px 6px 0 0;\n}\n.requests__cards-imgBlock img {\n  height: 100%;\n  width: 100%;\n}\n.requests__cards-imgBlock--reserve::before {\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0.0001) 100%);\n}\n\n.requests__cards-descr {\n  text-align: center;\n  padding-top: 20px;\n}\n\n.requests__reserveText {\n  top: 8%;\n  left: 25%;\n  font-size: 18px;\n}\n\n.requests__bearName {\n  color: #3F3F3F;\n  font-size: 18px;\n  margin-bottom: 9px;\n}\n.requests__bearName--reserve {\n  color: #FFFFFF;\n  margin-bottom: 9px;\n}\n\n.requests__bearTypeNGender {\n  color: #767676;\n  font-size: 14px;\n}\n.requests__bearTypeNGender--reserve {\n  color: #E7E7E7;\n}\n\n.requests__cards-btns {\n  display: flex;\n  justify-content: center;\n  flex-wrap: wrap;\n  margin-top: 24px;\n}\n\n.wrapperForNavigation {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n\n.requests__promo {\n  font-size: 24px;\n  color: #3F3F3F;\n}\n\n.wrapperForReserve {\n  display: flex;\n  align-items: center;\n}\n\n.requests__reserve {\n  display: flex;\n  align-items: center;\n  margin-right: 20px;\n}\n\n.requests__checkbox {\n  position: relative;\n  height: 20px;\n  width: 20px;\n  border-radius: 6px;\n  background-color: #E4E4E4;\n  cursor: pointer;\n  transition: 0.3s;\n}\n.requests__checkbox--active {\n  background-color: #FEED7E;\n}\n.requests__checkbox:hover {\n  background-color: #FEED7E;\n}\n\n.requests__checkmark {\n  display: none;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  width: 4px;\n  height: 8px;\n  border: solid black;\n  border-width: 1px 0 0 1px;\n  transform: translate(-50%, -50%) rotate(-135deg);\n}\n.requests__checkmark--active {\n  display: block;\n}\n\n.requests__text {\n  margin-left: 10px;\n  font-size: 14px;\n}\n\n.requests__filter {\n  position: relative;\n  display: inline-block;\n}\n\n.requests__filter-button {\n  display: flex;\n  width: 220px;\n  height: 32px;\n  border-radius: 6px;\n  background-color: #E4E4E4;\n  border-color: #E4E4E4;\n  cursor: pointer;\n}\n\n.requests__button-text {\n  color: #454545;\n  padding: 5px;\n  font-size: 14px;\n}\n\n.requests__button-arrow {\n  width: 8px;\n  height: 8px;\n  border: solid black;\n  border-width: 1px 0 0 1px;\n  transform: translate(-50%, -50%) rotate(-135deg);\n  position: absolute;\n  left: 90%;\n  top: 40%;\n  transition: 0.3s;\n}\n.requests__button-arrow--active {\n  top: 55%;\n  transform: translate(-50%, -50%) rotate(45deg);\n}\n\n.requests__filter-content {\n  display: none;\n  position: absolute;\n  background-color: #E4E4E4;\n  min-width: 218px;\n  overflow: auto;\n  border: 1px solid #ddd;\n  border-radius: 6px;\n  z-index: 1;\n}\n.requests__filter-content--active {\n  display: block;\n}\n.requests__filter-content a {\n  color: #454545;\n  padding: 10px 10px;\n  text-decoration: none;\n  display: block;\n  font-size: 14px;\n}\n.requests__filter-content a:hover {\n  background-color: #FEED7E;\n}\n\n.cardWrapper {\n  max-height: 100vh;\n}\n\n.bigCard {\n  position: fixed;\n  top: -130%;\n  left: 50%;\n  transform: translate(-50%, 0);\n  width: 460px;\n  transition: 0.5s;\n  z-index: 1;\n}\n.bigCard--active {\n  top: 30px;\n}\n\n.cardDescr {\n  background: #FFFFFF;\n  border-radius: 6px;\n  overflow: hidden;\n  width: 100%;\n  height: 100%;\n}\n.cardDescr--reserve {\n  background: #208085;\n}\n\n.cardDescr__imgBlock {\n  width: 100%;\n  height: 400px;\n}\n.cardDescr__imgBlock--reserve {\n  position: relative;\n}\n.cardDescr__imgBlock--reserve::before {\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0.0001) 100%);\n}\n.cardDescr__imgBlock img {\n  width: 100%;\n  height: 100%;\n}\n\n.cardDescr__reserveText {\n  font-size: 24px;\n  left: 5%;\n  top: 5%;\n}\n\n.cardDescr__bearsInfo {\n  padding: 20px 30px 30px 30px;\n  font-size: 13.2px;\n}\n\n.cardDescr__bearName {\n  color: #3F3F3F;\n  font-size: 24px;\n  margin-bottom: 7px;\n}\n.cardDescr__bearName--reserve {\n  font-size: 24px;\n  margin-bottom: 7px;\n  color: #FFFFFF;\n}\n\n.cardDescr__bearTypeNGender {\n  color: #767676;\n  font-size: 18px;\n}\n.cardDescr__bearTypeNGender--reserve {\n  color: #E7E7E7;\n  font-size: 18px;\n}\n\n.cardDescr__bearsInfo-descr {\n  margin-top: 16px;\n  color: #767676;\n}\n.cardDescr__bearsInfo-descr--reserve {\n  margin-top: 16px;\n  color: #E7E7E7;\n}\n\n.cardDescr__btns {\n  display: flex;\n  justify-content: space-around;\n}\n\n.cardClose {\n  position: absolute;\n  top: -0.5%;\n  left: 102%;\n  cursor: pointer;\n  width: 25px;\n  height: 25px;\n}\n.cardClose::before {\n  content: \"\";\n  position: fixed;\n  top: 1%;\n  left: 102%;\n  width: 25px;\n  height: 2px;\n  background: #FFFFFF;\n  transition: 0.5s;\n  transform: rotate(45deg);\n}\n.cardClose::after {\n  content: \"\";\n  position: fixed;\n  top: 1%;\n  left: 102%;\n  width: 25px;\n  height: 2px;\n  background: #FFFFFF;\n  transition: 0.5s;\n  transform: rotate(-45deg);\n}\n.cardClose:hover::before {\n  transform: rotate(-45deg);\n  background: indianred;\n}\n.cardClose:hover::after {\n  transform: rotate(-135deg);\n  background: indianred;\n}\n\nfooter {\n  width: 100%;\n  height: 40px;\n  background: #0E4447;\n  padding: 12px 290px;\n}\n\nfooter div {\n  font-size: 14px;\n  text-align: center;\n  color: #F4F4F4;\n}", "",{"version":3,"sources":["webpack://./src/scss/fonts.scss","webpack://./src/scss/main.scss","webpack://./src/scss/general.scss","webpack://./src/scss/mixins.scss","webpack://./src/scss/header.scss","webpack://./src/scss/requests.scss","webpack://./src/scss/requestsCards.scss","webpack://./src/scss/requestsFilter.scss","webpack://./src/scss/bigCard.scss","webpack://./src/scss/footer.scss"],"names":[],"mappings":"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","sourcesContent":["@font-face {\n  font-family: generalFont;\n  src: url(\"../fonts/Raleway/static/Raleway-Regular.ttf\")\n}","@font-face {\n  font-family: generalFont;\n  src: url(\"../fonts/Raleway/static/Raleway-Regular.ttf\");\n}\n* {\n  box-sizing: border-box;\n  margin: 0;\n  font-family: generalFont;\n  font-style: normal;\n}\n\nbody {\n  background-color: #F2F2F2;\n}\n\n.blur:before {\n  content: \"\";\n  position: fixed;\n  width: 100%;\n  height: 100%;\n  backdrop-filter: blur(40.7742px);\n  z-index: 1;\n}\n\n.bearName {\n  color: #3F3F3F;\n}\n.bearName--reserve {\n  color: #FFFFFF;\n}\n\n.bearTypeNGender {\n  color: #767676;\n}\n.bearTypeNGender--reserve {\n  color: #E7E7E7;\n}\n\n.reserveText {\n  position: absolute;\n  color: #58FFB5;\n}\n\n.btn--accept {\n  width: 180px;\n  height: 32px;\n  margin-bottom: 10px;\n  border: 16px;\n  border-radius: 16px;\n  font-size: 14px;\n  transition: 0.3s;\n  cursor: pointer;\n  background-color: #58FFB5;\n  color: #208085;\n}\n.btn--accept:hover {\n  background-color: #FEED7E;\n}\n\n.btn--reject {\n  width: 180px;\n  height: 32px;\n  margin-bottom: 10px;\n  border: 16px;\n  border-radius: 16px;\n  font-size: 14px;\n  transition: 0.3s;\n  cursor: pointer;\n  background-color: #208085;\n  color: #FFFFFF;\n}\n.btn--reject:hover {\n  background-color: #0E4447;\n}\n.btn--reject--reserve {\n  border: 2px solid white;\n}\n\nheader {\n  padding-top: 13px;\n  padding-left: 130px;\n  height: 60px;\n  background-color: #0E4447;\n}\nheader img {\n  display: inline-block;\n}\n\n.header__text {\n  display: inline-block;\n  position: absolute;\n  color: #F4F4F4;\n  margin-left: 12px;\n  font-size: 24px;\n}\n\n.requests {\n  min-height: calc(100vh - 100px);\n}\n\n.container {\n  display: flex;\n  flex-wrap: wrap;\n  padding: 42px 240px 0 240px;\n}\n\n.requests__cards {\n  margin-top: 39px;\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: center;\n}\n\n.requests__cards-card {\n  height: 380px;\n  width: 220px;\n  margin-right: 20px;\n  margin-bottom: 20px;\n  background-color: #FFFFFF;\n  border-radius: 6px 6px 6px 6px;\n  text-decoration: none;\n  CURSOR: pointer;\n  border-color: white;\n  transition: 0.5s;\n}\n.requests__cards-card--inactive {\n  display: none;\n}\n.requests__cards-card:hover {\n  border: 1px solid #208085;\n}\n.requests__cards-card--reserve {\n  background: #208085;\n}\n\n.requests__cards-imgBlock {\n  position: relative;\n  height: 180px;\n  width: 100%;\n  overflow: hidden;\n  border-radius: 6px 6px 0 0;\n}\n.requests__cards-imgBlock img {\n  height: 100%;\n  width: 100%;\n}\n.requests__cards-imgBlock--reserve::before {\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0.0001) 100%);\n}\n\n.requests__cards-descr {\n  text-align: center;\n  padding-top: 20px;\n}\n\n.requests__reserveText {\n  top: 8%;\n  left: 25%;\n  font-size: 18px;\n}\n\n.requests__bearName {\n  color: #3F3F3F;\n  font-size: 18px;\n  margin-bottom: 9px;\n}\n.requests__bearName--reserve {\n  color: #FFFFFF;\n  margin-bottom: 9px;\n}\n\n.requests__bearTypeNGender {\n  color: #767676;\n  font-size: 14px;\n}\n.requests__bearTypeNGender--reserve {\n  color: #E7E7E7;\n}\n\n.requests__cards-btns {\n  display: flex;\n  justify-content: center;\n  flex-wrap: wrap;\n  margin-top: 24px;\n}\n\n.wrapperForNavigation {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n\n.requests__promo {\n  font-size: 24px;\n  color: #3F3F3F;\n}\n\n.wrapperForReserve {\n  display: flex;\n  align-items: center;\n}\n\n.requests__reserve {\n  display: flex;\n  align-items: center;\n  margin-right: 20px;\n}\n\n.requests__checkbox {\n  position: relative;\n  height: 20px;\n  width: 20px;\n  border-radius: 6px;\n  background-color: #E4E4E4;\n  cursor: pointer;\n  transition: 0.3s;\n}\n.requests__checkbox--active {\n  background-color: #FEED7E;\n}\n.requests__checkbox:hover {\n  background-color: #FEED7E;\n}\n\n.requests__checkmark {\n  display: none;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  width: 4px;\n  height: 8px;\n  border: solid black;\n  border-width: 1px 0 0 1px;\n  transform: translate(-50%, -50%) rotate(-135deg);\n}\n.requests__checkmark--active {\n  display: block;\n}\n\n.requests__text {\n  margin-left: 10px;\n  font-size: 14px;\n}\n\n.requests__filter {\n  position: relative;\n  display: inline-block;\n}\n\n.requests__filter-button {\n  display: flex;\n  width: 220px;\n  height: 32px;\n  border-radius: 6px;\n  background-color: #E4E4E4;\n  border-color: #E4E4E4;\n  cursor: pointer;\n}\n\n.requests__button-text {\n  color: #454545;\n  padding: 5px;\n  font-size: 14px;\n}\n\n.requests__button-arrow {\n  width: 8px;\n  height: 8px;\n  border: solid black;\n  border-width: 1px 0 0 1px;\n  transform: translate(-50%, -50%) rotate(-135deg);\n  position: absolute;\n  left: 90%;\n  top: 40%;\n  transition: 0.3s;\n}\n.requests__button-arrow--active {\n  top: 55%;\n  transform: translate(-50%, -50%) rotate(45deg);\n}\n\n.requests__filter-content {\n  display: none;\n  position: absolute;\n  background-color: #E4E4E4;\n  min-width: 218px;\n  overflow: auto;\n  border: 1px solid #ddd;\n  border-radius: 6px;\n  z-index: 1;\n}\n.requests__filter-content--active {\n  display: block;\n}\n.requests__filter-content a {\n  color: #454545;\n  padding: 10px 10px;\n  text-decoration: none;\n  display: block;\n  font-size: 14px;\n}\n.requests__filter-content a:hover {\n  background-color: #FEED7E;\n}\n\n.cardWrapper {\n  max-height: 100vh;\n}\n\n.bigCard {\n  position: fixed;\n  top: -130%;\n  left: 50%;\n  transform: translate(-50%, 0);\n  width: 460px;\n  transition: 0.5s;\n  z-index: 1;\n}\n.bigCard--active {\n  top: 30px;\n}\n\n.cardDescr {\n  background: #FFFFFF;\n  border-radius: 6px;\n  overflow: hidden;\n  width: 100%;\n  height: 100%;\n}\n.cardDescr--reserve {\n  background: #208085;\n}\n\n.cardDescr__imgBlock {\n  width: 100%;\n  height: 400px;\n}\n.cardDescr__imgBlock--reserve {\n  position: relative;\n}\n.cardDescr__imgBlock--reserve::before {\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0.0001) 100%);\n}\n.cardDescr__imgBlock img {\n  width: 100%;\n  height: 100%;\n}\n\n.cardDescr__reserveText {\n  font-size: 24px;\n  left: 5%;\n  top: 5%;\n}\n\n.cardDescr__bearsInfo {\n  padding: 20px 30px 30px 30px;\n  font-size: 13.2px;\n}\n\n.cardDescr__bearName {\n  color: #3F3F3F;\n  font-size: 24px;\n  margin-bottom: 7px;\n}\n.cardDescr__bearName--reserve {\n  font-size: 24px;\n  margin-bottom: 7px;\n  color: #FFFFFF;\n}\n\n.cardDescr__bearTypeNGender {\n  color: #767676;\n  font-size: 18px;\n}\n.cardDescr__bearTypeNGender--reserve {\n  color: #E7E7E7;\n  font-size: 18px;\n}\n\n.cardDescr__bearsInfo-descr {\n  margin-top: 16px;\n  color: #767676;\n}\n.cardDescr__bearsInfo-descr--reserve {\n  margin-top: 16px;\n  color: #E7E7E7;\n}\n\n.cardDescr__btns {\n  display: flex;\n  justify-content: space-around;\n}\n\n.cardClose {\n  position: absolute;\n  top: -0.5%;\n  left: 102%;\n  cursor: pointer;\n  width: 25px;\n  height: 25px;\n}\n.cardClose::before {\n  content: \"\";\n  position: fixed;\n  top: 1%;\n  left: 102%;\n  width: 25px;\n  height: 2px;\n  background: #FFFFFF;\n  transition: 0.5s;\n  transform: rotate(45deg);\n}\n.cardClose::after {\n  content: \"\";\n  position: fixed;\n  top: 1%;\n  left: 102%;\n  width: 25px;\n  height: 2px;\n  background: #FFFFFF;\n  transition: 0.5s;\n  transform: rotate(-45deg);\n}\n.cardClose:hover::before {\n  transform: rotate(-45deg);\n  background: indianred;\n}\n.cardClose:hover::after {\n  transform: rotate(-135deg);\n  background: indianred;\n}\n\nfooter {\n  width: 100%;\n  height: 40px;\n  background: #0E4447;\n  padding: 12px 290px;\n}\n\nfooter div {\n  font-size: 14px;\n  text-align: center;\n  color: #F4F4F4;\n}","* {\r\n  box-sizing: border-box;\r\n  margin: 0;\r\n  font-family: generalFont;\r\n  font-style: normal;\r\n}\r\n\r\nbody {\r\n  background-color: #F2F2F2;\r\n}\r\n\r\n.blur:before{\r\n  content: '';\r\n  position: fixed;\r\n  width: 100%;\r\n  height: 100%;\r\n  backdrop-filter: blur(40.7742px);\r\n  z-index: 1;\r\n}\r\n\r\n.bearName{\r\n  color: #3F3F3F;\r\n  &--reserve {color: #FFFFFF}\r\n}\r\n\r\n.bearTypeNGender {\r\n  color: #767676;\r\n  &--reserve {color: #E7E7E7;}\r\n}\r\n\r\n.reserveText {\r\n  position: absolute;\r\n  color: #58FFB5;\r\n}\r\n\r\n.btn--accept {\r\n  @include button;\r\n  background-color: #58FFB5;\r\n  color: #208085;\r\n  &:hover {\r\n    background-color: #FEED7E;\r\n  }\r\n}\r\n\r\n.btn--reject {\r\n  @include button;\r\n  background-color: #208085;\r\n  color: #FFFFFF;\r\n  &:hover{\r\n    background-color: #0E4447;\r\n  }\r\n  &--reserve {\r\n    border: 2px solid white;\r\n  }\r\n}","@mixin button {\r\n  width: 180px;\r\n  height: 32px;\r\n  margin-bottom: 10px;\r\n  border: 16px;\r\n  border-radius: 16px;\r\n  font-size: 14px;\r\n  transition: 0.3s;\r\n  cursor: pointer;\r\n}\r\n\r\n@mixin cross {\r\n  content: \"\";\r\n  position: fixed;\r\n  top: 1%;\r\n  left: 102%;\r\n  width: 25px;\r\n  height: 2px;\r\n  background: #FFFFFF;\r\n  transition: 0.5s\r\n}\r\n\r\n$colorRed: red;\r\n$color3F: #3F3F3F;\r\n$colorReserveFF: #FFFFFF;\r\n$color76: #767676;\r\n$colorReserveE7: #E7E7E7;","header {\r\n  padding-top: 13px;\r\n  padding-left: 130px;\r\n  height: 60px;\r\n  background-color: #0E4447;\r\n  img {\r\n    display: inline-block\r\n  }\r\n}\r\n\r\n.header__text {\r\n    display: inline-block;\r\n    position: absolute;\r\n    color: #F4F4F4;\r\n    margin-left: 12px;\r\n    font-size: 24px;\r\n  }\r\n",".requests {\r\n  min-height: calc(100vh - 100px);\r\n}\r\n\r\n.container {\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  padding: 42px 240px 0 240px;\r\n}\r\n\r\n",".requests__cards {\r\n  margin-top: 39px;\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  justify-content: center;\r\n}\r\n\r\n.requests__cards-card{\r\n  height: 380px;\r\n  width: 220px;\r\n  margin-right: 20px;\r\n  margin-bottom: 20px;\r\n  background-color: #FFFFFF;\r\n  border-radius: 6px 6px 6px 6px;\r\n  text-decoration: none;\r\n  CURSOR: pointer;\r\n  border-color: white;\r\n  transition: 0.5s;\r\n  &--inactive{\r\n    display:none\r\n  }\r\n  &:hover{\r\n    border: 1px solid #208085;\r\n  }\r\n  &--reserve {\r\n    background: #208085;\r\n  }\r\n}\r\n\r\n.requests__cards-imgBlock{\r\n  position: relative;\r\n  height: 180px;\r\n  width: 100%;\r\n  overflow: hidden;\r\n  border-radius: 6px 6px 0 0;\r\n  img {\r\n    height: 100%;\r\n    width: 100%\r\n  }\r\n  &--reserve::before{\r\n    content: \"\";\r\n    position: absolute;\r\n    width: 100%;\r\n    height: 100%;\r\n    background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0.0001) 100%);\r\n  }\r\n\r\n}\r\n\r\n.requests__cards-descr{\r\n  text-align: center;\r\n  padding-top: 20px\r\n}\r\n\r\n.requests__reserveText{\r\n  top: 8%;\r\n  left: 25%;\r\n  font-size: 18px;\r\n}\r\n\r\n.requests__bearName{\r\n  color: $color3F;\r\n  font-size: 18px;\r\n  margin-bottom: 9px;\r\n  &--reserve{\r\n    color: $colorReserveFF;\r\n    margin-bottom: 9px;\r\n  }\r\n}\r\n\r\n.requests__bearTypeNGender {\r\n  color: $color76;\r\n  font-size: 14px;\r\n  &--reserve{\r\n    color: $colorReserveE7;\r\n  }\r\n}\r\n\r\n.requests__cards-btns{\r\n  display: flex;\r\n  justify-content: center;\r\n  flex-wrap: wrap;\r\n  margin-top: 24px;\r\n}",".wrapperForNavigation {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  width: 100%;\r\n}\r\n\r\n.requests__promo {\r\n  font-size: 24px;\r\n  color: #3F3F3F;\r\n}\r\n\r\n.wrapperForReserve {\r\n  display: flex;\r\n  align-items: center;\r\n}\r\n\r\n.requests__reserve {\r\n  display: flex;\r\n  align-items: center;\r\n  margin-right: 20px;\r\n}\r\n\r\n.requests__checkbox {\r\n  position: relative;\r\n  height: 20px;\r\n  width: 20px;\r\n  border-radius: 6px;\r\n  background-color: #E4E4E4;\r\n  cursor: pointer;\r\n  transition: 0.3s;\r\n  &--active {\r\n    background-color: #FEED7E;\r\n  }\r\n  &:hover {\r\n    background-color: #FEED7E;\r\n  }\r\n}\r\n\r\n.requests__checkmark {\r\n  display: none;\r\n  position: absolute;\r\n  top: 50%;\r\n  left: 50%;\r\n  width: 4px;\r\n  height: 8px;\r\n  border:  solid black;\r\n  border-width: 1px 0 0 1px;\r\n  transform: translate(-50%, -50%) rotate(-135deg);\r\n  &--active {\r\n    display: block;\r\n  }\r\n}\r\n\r\n.requests__text {\r\n  margin-left: 10px;\r\n  font-size: 14px;\r\n}\r\n\r\n.requests__filter {\r\n  position: relative;\r\n  display: inline-block;\r\n}\r\n\r\n.requests__filter-button{\r\n  display: flex;\r\n  width: 220px;\r\n  height: 32px;\r\n  border-radius: 6px;\r\n  background-color: #E4E4E4;\r\n  border-color: #E4E4E4;\r\n  cursor: pointer;\r\n}\r\n\r\n.requests__button-text {\r\n  color: #454545;\r\n  padding: 5px;\r\n  font-size: 14px;\r\n}\r\n\r\n.requests__button-arrow {\r\n  width: 8px;\r\n  height: 8px;\r\n  border:  solid black;\r\n  border-width: 1px 0 0 1px;\r\n  transform: translate(-50%, -50%) rotate(-135deg);\r\n  position: absolute;\r\n  left: 90%;\r\n  top: 40%;\r\n  transition: 0.3s;\r\n  &--active {\r\n    top: 55%;\r\n    transform: translate(-50%, -50%) rotate(45deg);\r\n  }\r\n}\r\n\r\n.requests__filter-content {\r\n  display: none;\r\n  position: absolute;\r\n  background-color: #E4E4E4;\r\n  min-width: 218px;\r\n  overflow: auto;\r\n  border: 1px solid #ddd;\r\n  border-radius: 6px;\r\n  z-index: 1;\r\n  &--active {\r\n    display: block;\r\n  }\r\n  a {\r\n    color: #454545;\r\n    padding: 10px 10px;\r\n    text-decoration: none;\r\n    display: block;\r\n    font-size: 14px;\r\n    &:hover{\r\n      background-color: #FEED7E;\r\n    }\r\n  }\r\n}",".cardWrapper {\r\n  max-height: 100vh;\r\n}\r\n\r\n.bigCard{\r\n  position: fixed;\r\n  top: -130%;\r\n  left: 50%;\r\n  transform: translate(-50%, 0);\r\n  width: 460px;\r\n  transition: 0.5s;\r\n  z-index: 1;\r\n  &--active{\r\n    top: 30px\r\n  }\r\n}\r\n\r\n.cardDescr {\r\n  background: #FFFFFF;\r\n  border-radius: 6px;\r\n  overflow: hidden;\r\n  width: 100%;\r\n  height: 100%;\r\n  &--reserve {\r\n    background: #208085;\r\n  }\r\n}\r\n\r\n.cardDescr__imgBlock {\r\n  width: 100%;\r\n  height: 400px;\r\n  &--reserve {\r\n    position: relative;\r\n    &::before{\r\n      content: \"\";\r\n      position: absolute;\r\n      width: 100%;\r\n      height: 100%;\r\n      background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0.0001) 100%)\r\n    }\r\n  }\r\n  img{\r\n    width: 100%;\r\n    height: 100%;\r\n  }\r\n}\r\n\r\n.cardDescr__reserveText {\r\n  font-size: 24px;\r\n  left: 5%;\r\n  top: 5%\r\n}\r\n\r\n.cardDescr__bearsInfo {\r\n  padding: 20px 30px 30px 30px;\r\n  font-size: 13.2px;\r\n}\r\n\r\n.cardDescr__bearName{\r\n  color: $color3F;\r\n  font-size: 24px;\r\n  margin-bottom: 7px;\r\n  &--reserve{\r\n    font-size: 24px;\r\n    margin-bottom: 7px;\r\n    color: $colorReserveFF\r\n  }\r\n}\r\n\r\n.cardDescr__bearTypeNGender {\r\n  color: $color76;\r\n  font-size: 18px;\r\n  &--reserve{\r\n    color: $colorReserveE7;\r\n    font-size: 18px;\r\n  }\r\n}\r\n\r\n.cardDescr__bearsInfo-descr {\r\n  margin-top: 16px;\r\n  color: $color76;\r\n  &--reserve{\r\n    margin-top: 16px;\r\n    color: $colorReserveE7\r\n  }\r\n}\r\n\r\n.cardDescr__btns {\r\n  display: flex;\r\n  justify-content: space-around;\r\n}\r\n\r\n.cardClose {\r\n  position: absolute;\r\n  top: -0.5%;\r\n  left: 102%;\r\n  cursor: pointer;\r\n  width: 25px;\r\n  height: 25px;\r\n  &::before{\r\n    @include cross;\r\n    transform: rotate(45deg)\r\n  }\r\n  &::after{\r\n    @include cross;\r\n    transform: rotate(-45deg)\r\n  }\r\n  &:hover::before{\r\n    transform: rotate(-45deg);\r\n    background: indianred\r\n  }\r\n  &:hover::after {\r\n    transform: rotate(-135deg);\r\n    background: indianred\r\n  }\r\n}","footer {\r\n  width: 100%;\r\n  height: 40px;\r\n  background: #0E4447;\r\n  padding: 12px 290px;\r\n}\r\n\r\nfooter div {\r\n  font-size: 14px;\r\n  text-align: center;\r\n  color: #F4F4F4;\r\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "@font-face {\n  font-family: generalFont;\n  src: url(" + ___CSS_LOADER_URL_REPLACEMENT_0___ + ");\n}\n* {\n  box-sizing: border-box;\n  margin: 0;\n  font-family: generalFont;\n  font-style: normal;\n}\n\nbody {\n  background-color: #F2F2F2;\n}\n\n.blur:before {\n  content: \"\";\n  position: fixed;\n  width: 100%;\n  height: 100%;\n  -webkit-backdrop-filter: blur(40.7742px);\n          backdrop-filter: blur(40.7742px);\n  z-index: 1;\n}\n\n.bearName {\n  color: #3F3F3F;\n}\n.bearName--reserve {\n  color: #FFFFFF;\n}\n\n.bearTypeNGender {\n  color: #767676;\n}\n.bearTypeNGender--reserve {\n  color: #E7E7E7;\n}\n\n.reserveText {\n  position: absolute;\n  color: #58FFB5;\n}\n\n.btn--accept {\n  width: 180px;\n  height: 32px;\n  margin-bottom: 10px;\n  border: 16px;\n  border-radius: 16px;\n  font-size: 14px;\n  transition: 0.3s;\n  cursor: pointer;\n  background-color: #58FFB5;\n  color: #208085;\n}\n.btn--accept:hover {\n  background-color: #FEED7E;\n}\n\n.btn--reject {\n  width: 180px;\n  height: 32px;\n  margin-bottom: 10px;\n  border: 16px;\n  border-radius: 16px;\n  font-size: 14px;\n  transition: 0.3s;\n  cursor: pointer;\n  background-color: #208085;\n  color: #FFFFFF;\n}\n.btn--reject:hover {\n  background-color: #0E4447;\n}\n.btn--reject--reserve {\n  border: 2px solid white;\n}\n\nheader {\n  padding-top: 13px;\n  padding-left: 130px;\n  height: 60px;\n  background-color: #0E4447;\n}\nheader img {\n  display: inline-block;\n}\n\n.header__text {\n  display: inline-block;\n  position: absolute;\n  color: #F4F4F4;\n  margin-left: 12px;\n  font-size: 24px;\n}\n\n.requests {\n  min-height: calc(100vh - 100px);\n}\n\n.container {\n  display: flex;\n  flex-wrap: wrap;\n  padding: 42px 240px 0 240px;\n}\n\n.requests__cards {\n  margin-top: 39px;\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: center;\n}\n\n.requests__cards-card {\n  height: 380px;\n  width: 220px;\n  margin-right: 20px;\n  margin-bottom: 20px;\n  background-color: #FFFFFF;\n  border-radius: 6px 6px 6px 6px;\n  text-decoration: none;\n  CURSOR: pointer;\n  border-color: white;\n  transition: 0.5s;\n}\n.requests__cards-card--inactive {\n  display: none;\n}\n.requests__cards-card:hover {\n  border: 1px solid #208085;\n}\n.requests__cards-card--reserve {\n  background: #208085;\n}\n\n.requests__cards-imgBlock {\n  position: relative;\n  height: 180px;\n  width: 100%;\n  overflow: hidden;\n  border-radius: 6px 6px 0 0;\n}\n.requests__cards-imgBlock img {\n  height: 100%;\n  width: 100%;\n}\n.requests__cards-imgBlock--reserve::before {\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0.0001) 100%);\n}\n\n.requests__cards-descr {\n  text-align: center;\n  padding-top: 20px;\n}\n\n.requests__reserveText {\n  top: 8%;\n  left: 25%;\n  font-size: 18px;\n}\n\n.requests__bearName {\n  color: #3F3F3F;\n  font-size: 18px;\n  margin-bottom: 9px;\n}\n.requests__bearName--reserve {\n  color: #FFFFFF;\n  margin-bottom: 9px;\n}\n\n.requests__bearTypeNGender {\n  color: #767676;\n  font-size: 14px;\n}\n.requests__bearTypeNGender--reserve {\n  color: #E7E7E7;\n}\n\n.requests__cards-btns {\n  display: flex;\n  justify-content: center;\n  flex-wrap: wrap;\n  margin-top: 24px;\n}\n\n.wrapperForNavigation {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n\n.requests__promo {\n  font-size: 24px;\n  color: #3F3F3F;\n}\n\n.wrapperForReserve {\n  display: flex;\n  align-items: center;\n}\n\n.requests__reserve {\n  display: flex;\n  align-items: center;\n  margin-right: 20px;\n}\n\n.requests__checkbox {\n  position: relative;\n  height: 20px;\n  width: 20px;\n  border-radius: 6px;\n  background-color: #E4E4E4;\n  cursor: pointer;\n  transition: 0.3s;\n}\n.requests__checkbox--active {\n  background-color: #FEED7E;\n}\n.requests__checkbox:hover {\n  background-color: #FEED7E;\n}\n\n.requests__checkmark {\n  display: none;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  width: 4px;\n  height: 8px;\n  border: solid black;\n  border-width: 1px 0 0 1px;\n  transform: translate(-50%, -50%) rotate(-135deg);\n}\n.requests__checkmark--active {\n  display: block;\n}\n\n.requests__text {\n  margin-left: 10px;\n  font-size: 14px;\n}\n\n.requests__filter {\n  position: relative;\n  display: inline-block;\n}\n.requests__filter-node {\n  color: #454545;\n  padding: 10px 10px;\n  text-decoration: none;\n  display: block;\n  font-size: 14px;\n}\n.requests__filter-node:hover {\n  background-color: #FEED7E;\n}\n.requests__filter-node--active {\n  background-color: #FEED7E;\n}\n\n.requests__filter-button {\n  display: flex;\n  width: 220px;\n  height: 32px;\n  border-radius: 6px;\n  background-color: #E4E4E4;\n  border-color: #E4E4E4;\n  cursor: pointer;\n}\n\n.requests__button-text {\n  color: #454545;\n  padding: 5px;\n  font-size: 14px;\n}\n\n.requests__button-arrow {\n  width: 8px;\n  height: 8px;\n  border: solid black;\n  border-width: 1px 0 0 1px;\n  transform: translate(-50%, -50%) rotate(-135deg);\n  position: absolute;\n  left: 90%;\n  top: 40%;\n  transition: 0.3s;\n}\n.requests__button-arrow--active {\n  top: 55%;\n  transform: translate(-50%, -50%) rotate(45deg);\n}\n\n.requests__filter-content {\n  display: none;\n  position: absolute;\n  background-color: #E4E4E4;\n  min-width: 218px;\n  overflow: auto;\n  border: 1px solid #ddd;\n  border-radius: 6px;\n  z-index: 1;\n}\n.requests__filter-content--active {\n  display: block;\n}\n\n.cardWrapper {\n  max-height: 100vh;\n}\n\n.bigCard {\n  position: fixed;\n  top: -130%;\n  left: 50%;\n  transform: translate(-50%, 0);\n  width: 460px;\n  transition: 0.5s;\n  z-index: 1;\n}\n.bigCard--active {\n  top: 30px;\n}\n\n.cardDescr {\n  background: #FFFFFF;\n  border-radius: 6px;\n  overflow: hidden;\n  width: 100%;\n  height: 100%;\n}\n.cardDescr--reserve {\n  background: #208085;\n}\n\n.cardDescr__imgBlock {\n  width: 100%;\n  height: 400px;\n}\n.cardDescr__imgBlock--reserve {\n  position: relative;\n}\n.cardDescr__imgBlock--reserve::before {\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0.0001) 100%);\n}\n.cardDescr__imgBlock img {\n  width: 100%;\n  height: 100%;\n}\n\n.cardDescr__reserveText {\n  font-size: 24px;\n  left: 5%;\n  top: 5%;\n}\n\n.cardDescr__bearsInfo {\n  padding: 20px 30px 30px 30px;\n  font-size: 13.2px;\n}\n\n.cardDescr__bearName {\n  color: #3F3F3F;\n  font-size: 24px;\n  margin-bottom: 7px;\n}\n.cardDescr__bearName--reserve {\n  font-size: 24px;\n  margin-bottom: 7px;\n  color: #FFFFFF;\n}\n\n.cardDescr__bearTypeNGender {\n  color: #767676;\n  font-size: 18px;\n}\n.cardDescr__bearTypeNGender--reserve {\n  color: #E7E7E7;\n  font-size: 18px;\n}\n\n.cardDescr__bearsInfo-descr {\n  margin-top: 16px;\n  color: #767676;\n}\n.cardDescr__bearsInfo-descr--reserve {\n  margin-top: 16px;\n  color: #E7E7E7;\n}\n\n.cardDescr__btns {\n  display: flex;\n  justify-content: space-around;\n}\n\n.cardClose {\n  position: absolute;\n  top: -0.5%;\n  left: 102%;\n  cursor: pointer;\n  width: 25px;\n  height: 25px;\n}\n.cardClose::before {\n  content: \"\";\n  position: fixed;\n  top: 1%;\n  left: 102%;\n  width: 25px;\n  height: 2px;\n  background: #FFFFFF;\n  transition: 0.5s;\n  transform: rotate(45deg);\n}\n.cardClose::after {\n  content: \"\";\n  position: fixed;\n  top: 1%;\n  left: 102%;\n  width: 25px;\n  height: 2px;\n  background: #FFFFFF;\n  transition: 0.5s;\n  transform: rotate(-45deg);\n}\n.cardClose:hover::before {\n  transform: rotate(-45deg);\n  background: indianred;\n}\n.cardClose:hover::after {\n  transform: rotate(-135deg);\n  background: indianred;\n}\n\nfooter {\n  width: 100%;\n  height: 40px;\n  background: #0E4447;\n  padding: 12px 290px;\n}\n\nfooter div {\n  font-size: 14px;\n  text-align: center;\n  color: #F4F4F4;\n}", "",{"version":3,"sources":["webpack://./src/scss/fonts.scss","webpack://./src/scss/main.scss","webpack://./src/scss/general.scss","webpack://./src/scss/mixins.scss","webpack://./src/scss/header.scss","webpack://./src/scss/requests.scss","webpack://./src/scss/requestsCards.scss","webpack://./src/scss/requestsFilter.scss","webpack://./src/scss/bigCard.scss","webpack://./src/scss/footer.scss"],"names":[],"mappings":"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","sourcesContent":["@font-face {\n  font-family: generalFont;\n  src: url(\"../fonts/Raleway/static/Raleway-Regular.ttf\")\n}","@font-face {\n  font-family: generalFont;\n  src: url(\"../fonts/Raleway/static/Raleway-Regular.ttf\");\n}\n* {\n  box-sizing: border-box;\n  margin: 0;\n  font-family: generalFont;\n  font-style: normal;\n}\n\nbody {\n  background-color: #F2F2F2;\n}\n\n.blur:before {\n  content: \"\";\n  position: fixed;\n  width: 100%;\n  height: 100%;\n  backdrop-filter: blur(40.7742px);\n  z-index: 1;\n}\n\n.bearName {\n  color: #3F3F3F;\n}\n.bearName--reserve {\n  color: #FFFFFF;\n}\n\n.bearTypeNGender {\n  color: #767676;\n}\n.bearTypeNGender--reserve {\n  color: #E7E7E7;\n}\n\n.reserveText {\n  position: absolute;\n  color: #58FFB5;\n}\n\n.btn--accept {\n  width: 180px;\n  height: 32px;\n  margin-bottom: 10px;\n  border: 16px;\n  border-radius: 16px;\n  font-size: 14px;\n  transition: 0.3s;\n  cursor: pointer;\n  background-color: #58FFB5;\n  color: #208085;\n}\n.btn--accept:hover {\n  background-color: #FEED7E;\n}\n\n.btn--reject {\n  width: 180px;\n  height: 32px;\n  margin-bottom: 10px;\n  border: 16px;\n  border-radius: 16px;\n  font-size: 14px;\n  transition: 0.3s;\n  cursor: pointer;\n  background-color: #208085;\n  color: #FFFFFF;\n}\n.btn--reject:hover {\n  background-color: #0E4447;\n}\n.btn--reject--reserve {\n  border: 2px solid white;\n}\n\nheader {\n  padding-top: 13px;\n  padding-left: 130px;\n  height: 60px;\n  background-color: #0E4447;\n}\nheader img {\n  display: inline-block;\n}\n\n.header__text {\n  display: inline-block;\n  position: absolute;\n  color: #F4F4F4;\n  margin-left: 12px;\n  font-size: 24px;\n}\n\n.requests {\n  min-height: calc(100vh - 100px);\n}\n\n.container {\n  display: flex;\n  flex-wrap: wrap;\n  padding: 42px 240px 0 240px;\n}\n\n.requests__cards {\n  margin-top: 39px;\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: center;\n}\n\n.requests__cards-card {\n  height: 380px;\n  width: 220px;\n  margin-right: 20px;\n  margin-bottom: 20px;\n  background-color: #FFFFFF;\n  border-radius: 6px 6px 6px 6px;\n  text-decoration: none;\n  CURSOR: pointer;\n  border-color: white;\n  transition: 0.5s;\n}\n.requests__cards-card--inactive {\n  display: none;\n}\n.requests__cards-card:hover {\n  border: 1px solid #208085;\n}\n.requests__cards-card--reserve {\n  background: #208085;\n}\n\n.requests__cards-imgBlock {\n  position: relative;\n  height: 180px;\n  width: 100%;\n  overflow: hidden;\n  border-radius: 6px 6px 0 0;\n}\n.requests__cards-imgBlock img {\n  height: 100%;\n  width: 100%;\n}\n.requests__cards-imgBlock--reserve::before {\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0.0001) 100%);\n}\n\n.requests__cards-descr {\n  text-align: center;\n  padding-top: 20px;\n}\n\n.requests__reserveText {\n  top: 8%;\n  left: 25%;\n  font-size: 18px;\n}\n\n.requests__bearName {\n  color: #3F3F3F;\n  font-size: 18px;\n  margin-bottom: 9px;\n}\n.requests__bearName--reserve {\n  color: #FFFFFF;\n  margin-bottom: 9px;\n}\n\n.requests__bearTypeNGender {\n  color: #767676;\n  font-size: 14px;\n}\n.requests__bearTypeNGender--reserve {\n  color: #E7E7E7;\n}\n\n.requests__cards-btns {\n  display: flex;\n  justify-content: center;\n  flex-wrap: wrap;\n  margin-top: 24px;\n}\n\n.wrapperForNavigation {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n\n.requests__promo {\n  font-size: 24px;\n  color: #3F3F3F;\n}\n\n.wrapperForReserve {\n  display: flex;\n  align-items: center;\n}\n\n.requests__reserve {\n  display: flex;\n  align-items: center;\n  margin-right: 20px;\n}\n\n.requests__checkbox {\n  position: relative;\n  height: 20px;\n  width: 20px;\n  border-radius: 6px;\n  background-color: #E4E4E4;\n  cursor: pointer;\n  transition: 0.3s;\n}\n.requests__checkbox--active {\n  background-color: #FEED7E;\n}\n.requests__checkbox:hover {\n  background-color: #FEED7E;\n}\n\n.requests__checkmark {\n  display: none;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  width: 4px;\n  height: 8px;\n  border: solid black;\n  border-width: 1px 0 0 1px;\n  transform: translate(-50%, -50%) rotate(-135deg);\n}\n.requests__checkmark--active {\n  display: block;\n}\n\n.requests__text {\n  margin-left: 10px;\n  font-size: 14px;\n}\n\n.requests__filter {\n  position: relative;\n  display: inline-block;\n}\n.requests__filter-node {\n  color: #454545;\n  padding: 10px 10px;\n  text-decoration: none;\n  display: block;\n  font-size: 14px;\n}\n.requests__filter-node:hover {\n  background-color: #FEED7E;\n}\n.requests__filter-node--active {\n  background-color: #FEED7E;\n}\n\n.requests__filter-button {\n  display: flex;\n  width: 220px;\n  height: 32px;\n  border-radius: 6px;\n  background-color: #E4E4E4;\n  border-color: #E4E4E4;\n  cursor: pointer;\n}\n\n.requests__button-text {\n  color: #454545;\n  padding: 5px;\n  font-size: 14px;\n}\n\n.requests__button-arrow {\n  width: 8px;\n  height: 8px;\n  border: solid black;\n  border-width: 1px 0 0 1px;\n  transform: translate(-50%, -50%) rotate(-135deg);\n  position: absolute;\n  left: 90%;\n  top: 40%;\n  transition: 0.3s;\n}\n.requests__button-arrow--active {\n  top: 55%;\n  transform: translate(-50%, -50%) rotate(45deg);\n}\n\n.requests__filter-content {\n  display: none;\n  position: absolute;\n  background-color: #E4E4E4;\n  min-width: 218px;\n  overflow: auto;\n  border: 1px solid #ddd;\n  border-radius: 6px;\n  z-index: 1;\n}\n.requests__filter-content--active {\n  display: block;\n}\n\n.cardWrapper {\n  max-height: 100vh;\n}\n\n.bigCard {\n  position: fixed;\n  top: -130%;\n  left: 50%;\n  transform: translate(-50%, 0);\n  width: 460px;\n  transition: 0.5s;\n  z-index: 1;\n}\n.bigCard--active {\n  top: 30px;\n}\n\n.cardDescr {\n  background: #FFFFFF;\n  border-radius: 6px;\n  overflow: hidden;\n  width: 100%;\n  height: 100%;\n}\n.cardDescr--reserve {\n  background: #208085;\n}\n\n.cardDescr__imgBlock {\n  width: 100%;\n  height: 400px;\n}\n.cardDescr__imgBlock--reserve {\n  position: relative;\n}\n.cardDescr__imgBlock--reserve::before {\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0.0001) 100%);\n}\n.cardDescr__imgBlock img {\n  width: 100%;\n  height: 100%;\n}\n\n.cardDescr__reserveText {\n  font-size: 24px;\n  left: 5%;\n  top: 5%;\n}\n\n.cardDescr__bearsInfo {\n  padding: 20px 30px 30px 30px;\n  font-size: 13.2px;\n}\n\n.cardDescr__bearName {\n  color: #3F3F3F;\n  font-size: 24px;\n  margin-bottom: 7px;\n}\n.cardDescr__bearName--reserve {\n  font-size: 24px;\n  margin-bottom: 7px;\n  color: #FFFFFF;\n}\n\n.cardDescr__bearTypeNGender {\n  color: #767676;\n  font-size: 18px;\n}\n.cardDescr__bearTypeNGender--reserve {\n  color: #E7E7E7;\n  font-size: 18px;\n}\n\n.cardDescr__bearsInfo-descr {\n  margin-top: 16px;\n  color: #767676;\n}\n.cardDescr__bearsInfo-descr--reserve {\n  margin-top: 16px;\n  color: #E7E7E7;\n}\n\n.cardDescr__btns {\n  display: flex;\n  justify-content: space-around;\n}\n\n.cardClose {\n  position: absolute;\n  top: -0.5%;\n  left: 102%;\n  cursor: pointer;\n  width: 25px;\n  height: 25px;\n}\n.cardClose::before {\n  content: \"\";\n  position: fixed;\n  top: 1%;\n  left: 102%;\n  width: 25px;\n  height: 2px;\n  background: #FFFFFF;\n  transition: 0.5s;\n  transform: rotate(45deg);\n}\n.cardClose::after {\n  content: \"\";\n  position: fixed;\n  top: 1%;\n  left: 102%;\n  width: 25px;\n  height: 2px;\n  background: #FFFFFF;\n  transition: 0.5s;\n  transform: rotate(-45deg);\n}\n.cardClose:hover::before {\n  transform: rotate(-45deg);\n  background: indianred;\n}\n.cardClose:hover::after {\n  transform: rotate(-135deg);\n  background: indianred;\n}\n\nfooter {\n  width: 100%;\n  height: 40px;\n  background: #0E4447;\n  padding: 12px 290px;\n}\n\nfooter div {\n  font-size: 14px;\n  text-align: center;\n  color: #F4F4F4;\n}","* {\r\n  box-sizing: border-box;\r\n  margin: 0;\r\n  font-family: generalFont;\r\n  font-style: normal;\r\n}\r\n\r\nbody {\r\n  background-color: #F2F2F2;\r\n}\r\n\r\n.blur:before{\r\n  content: '';\r\n  position: fixed;\r\n  width: 100%;\r\n  height: 100%;\r\n  backdrop-filter: blur(40.7742px);\r\n  z-index: 1;\r\n}\r\n\r\n.bearName{\r\n  color: #3F3F3F;\r\n  &--reserve {color: #FFFFFF}\r\n}\r\n\r\n.bearTypeNGender {\r\n  color: #767676;\r\n  &--reserve {color: #E7E7E7;}\r\n}\r\n\r\n.reserveText {\r\n  position: absolute;\r\n  color: #58FFB5;\r\n}\r\n\r\n.btn--accept {\r\n  @include button;\r\n  background-color: #58FFB5;\r\n  color: #208085;\r\n  &:hover {\r\n    background-color: #FEED7E;\r\n  }\r\n}\r\n\r\n.btn--reject {\r\n  @include button;\r\n  background-color: #208085;\r\n  color: #FFFFFF;\r\n  &:hover{\r\n    background-color: #0E4447;\r\n  }\r\n  &--reserve {\r\n    border: 2px solid white;\r\n  }\r\n}","@mixin button {\r\n  width: 180px;\r\n  height: 32px;\r\n  margin-bottom: 10px;\r\n  border: 16px;\r\n  border-radius: 16px;\r\n  font-size: 14px;\r\n  transition: 0.3s;\r\n  cursor: pointer;\r\n}\r\n\r\n@mixin cross {\r\n  content: \"\";\r\n  position: fixed;\r\n  top: 1%;\r\n  left: 102%;\r\n  width: 25px;\r\n  height: 2px;\r\n  background: #FFFFFF;\r\n  transition: 0.5s\r\n}\r\n\r\n$colorRed: red;\r\n$color3F: #3F3F3F;\r\n$colorReserveFF: #FFFFFF;\r\n$color76: #767676;\r\n$colorReserveE7: #E7E7E7;","header {\r\n  padding-top: 13px;\r\n  padding-left: 130px;\r\n  height: 60px;\r\n  background-color: #0E4447;\r\n  img {\r\n    display: inline-block\r\n  }\r\n}\r\n\r\n.header__text {\r\n    display: inline-block;\r\n    position: absolute;\r\n    color: #F4F4F4;\r\n    margin-left: 12px;\r\n    font-size: 24px;\r\n  }\r\n",".requests {\r\n  min-height: calc(100vh - 100px);\r\n}\r\n\r\n.container {\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  padding: 42px 240px 0 240px;\r\n}\r\n\r\n",".requests__cards {\r\n  margin-top: 39px;\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  justify-content: center;\r\n}\r\n\r\n.requests__cards-card{\r\n  height: 380px;\r\n  width: 220px;\r\n  margin-right: 20px;\r\n  margin-bottom: 20px;\r\n  background-color: #FFFFFF;\r\n  border-radius: 6px 6px 6px 6px;\r\n  text-decoration: none;\r\n  CURSOR: pointer;\r\n  border-color: white;\r\n  transition: 0.5s;\r\n  &--inactive{\r\n    display:none\r\n  }\r\n  &:hover{\r\n    border: 1px solid #208085;\r\n  }\r\n  &--reserve {\r\n    background: #208085;\r\n  }\r\n}\r\n\r\n.requests__cards-imgBlock{\r\n  position: relative;\r\n  height: 180px;\r\n  width: 100%;\r\n  overflow: hidden;\r\n  border-radius: 6px 6px 0 0;\r\n  img {\r\n    height: 100%;\r\n    width: 100%\r\n  }\r\n  &--reserve::before{\r\n    content: \"\";\r\n    position: absolute;\r\n    width: 100%;\r\n    height: 100%;\r\n    background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0.0001) 100%);\r\n  }\r\n\r\n}\r\n\r\n.requests__cards-descr{\r\n  text-align: center;\r\n  padding-top: 20px\r\n}\r\n\r\n.requests__reserveText{\r\n  top: 8%;\r\n  left: 25%;\r\n  font-size: 18px;\r\n}\r\n\r\n.requests__bearName{\r\n  color: $color3F;\r\n  font-size: 18px;\r\n  margin-bottom: 9px;\r\n  &--reserve{\r\n    color: $colorReserveFF;\r\n    margin-bottom: 9px;\r\n  }\r\n}\r\n\r\n.requests__bearTypeNGender {\r\n  color: $color76;\r\n  font-size: 14px;\r\n  &--reserve{\r\n    color: $colorReserveE7;\r\n  }\r\n}\r\n\r\n.requests__cards-btns{\r\n  display: flex;\r\n  justify-content: center;\r\n  flex-wrap: wrap;\r\n  margin-top: 24px;\r\n}",".wrapperForNavigation {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  width: 100%;\r\n}\r\n\r\n.requests__promo {\r\n  font-size: 24px;\r\n  color: #3F3F3F;\r\n}\r\n\r\n.wrapperForReserve {\r\n  display: flex;\r\n  align-items: center;\r\n}\r\n\r\n.requests__reserve {\r\n  display: flex;\r\n  align-items: center;\r\n  margin-right: 20px;\r\n}\r\n\r\n.requests__checkbox {\r\n  position: relative;\r\n  height: 20px;\r\n  width: 20px;\r\n  border-radius: 6px;\r\n  background-color: #E4E4E4;\r\n  cursor: pointer;\r\n  transition: 0.3s;\r\n  &--active {\r\n    background-color: #FEED7E;\r\n  }\r\n  &:hover {\r\n    background-color: #FEED7E;\r\n  }\r\n}\r\n\r\n.requests__checkmark {\r\n  display: none;\r\n  position: absolute;\r\n  top: 50%;\r\n  left: 50%;\r\n  width: 4px;\r\n  height: 8px;\r\n  border:  solid black;\r\n  border-width: 1px 0 0 1px;\r\n  transform: translate(-50%, -50%) rotate(-135deg);\r\n  &--active {\r\n    display: block;\r\n  }\r\n}\r\n\r\n.requests__text {\r\n  margin-left: 10px;\r\n  font-size: 14px;\r\n}\r\n\r\n.requests__filter {\r\n  position: relative;\r\n  display: inline-block;\r\n  &-node {\r\n    color: #454545;\r\n    padding: 10px 10px;\r\n    text-decoration: none;\r\n    display: block;\r\n    font-size: 14px;\r\n    &:hover{\r\n      background-color: #FEED7E;\r\n    }\r\n    &--active {\r\n      background-color: #FEED7E\r\n    }\r\n  }\r\n}\r\n\r\n.requests__filter-button{\r\n  display: flex;\r\n  width: 220px;\r\n  height: 32px;\r\n  border-radius: 6px;\r\n  background-color: #E4E4E4;\r\n  border-color: #E4E4E4;\r\n  cursor: pointer;\r\n}\r\n\r\n.requests__button-text {\r\n  color: #454545;\r\n  padding: 5px;\r\n  font-size: 14px;\r\n}\r\n\r\n.requests__button-arrow {\r\n  width: 8px;\r\n  height: 8px;\r\n  border:  solid black;\r\n  border-width: 1px 0 0 1px;\r\n  transform: translate(-50%, -50%) rotate(-135deg);\r\n  position: absolute;\r\n  left: 90%;\r\n  top: 40%;\r\n  transition: 0.3s;\r\n  &--active {\r\n    top: 55%;\r\n    transform: translate(-50%, -50%) rotate(45deg);\r\n  }\r\n}\r\n\r\n.requests__filter-content {\r\n  display: none;\r\n  position: absolute;\r\n  background-color: #E4E4E4;\r\n  min-width: 218px;\r\n  overflow: auto;\r\n  border: 1px solid #ddd;\r\n  border-radius: 6px;\r\n  z-index: 1;\r\n  &--active {\r\n    display: block;\r\n  }\r\n}",".cardWrapper {\r\n  max-height: 100vh;\r\n}\r\n\r\n.bigCard{\r\n  position: fixed;\r\n  top: -130%;\r\n  left: 50%;\r\n  transform: translate(-50%, 0);\r\n  width: 460px;\r\n  transition: 0.5s;\r\n  z-index: 1;\r\n  &--active{\r\n    top: 30px\r\n  }\r\n}\r\n\r\n.cardDescr {\r\n  background: #FFFFFF;\r\n  border-radius: 6px;\r\n  overflow: hidden;\r\n  width: 100%;\r\n  height: 100%;\r\n  &--reserve {\r\n    background: #208085;\r\n  }\r\n}\r\n\r\n.cardDescr__imgBlock {\r\n  width: 100%;\r\n  height: 400px;\r\n  &--reserve {\r\n    position: relative;\r\n    &::before{\r\n      content: \"\";\r\n      position: absolute;\r\n      width: 100%;\r\n      height: 100%;\r\n      background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0.0001) 100%)\r\n    }\r\n  }\r\n  img{\r\n    width: 100%;\r\n    height: 100%;\r\n  }\r\n}\r\n\r\n.cardDescr__reserveText {\r\n  font-size: 24px;\r\n  left: 5%;\r\n  top: 5%\r\n}\r\n\r\n.cardDescr__bearsInfo {\r\n  padding: 20px 30px 30px 30px;\r\n  font-size: 13.2px;\r\n}\r\n\r\n.cardDescr__bearName{\r\n  color: $color3F;\r\n  font-size: 24px;\r\n  margin-bottom: 7px;\r\n  &--reserve{\r\n    font-size: 24px;\r\n    margin-bottom: 7px;\r\n    color: $colorReserveFF\r\n  }\r\n}\r\n\r\n.cardDescr__bearTypeNGender {\r\n  color: $color76;\r\n  font-size: 18px;\r\n  &--reserve{\r\n    color: $colorReserveE7;\r\n    font-size: 18px;\r\n  }\r\n}\r\n\r\n.cardDescr__bearsInfo-descr {\r\n  margin-top: 16px;\r\n  color: $color76;\r\n  &--reserve{\r\n    margin-top: 16px;\r\n    color: $colorReserveE7\r\n  }\r\n}\r\n\r\n.cardDescr__btns {\r\n  display: flex;\r\n  justify-content: space-around;\r\n}\r\n\r\n.cardClose {\r\n  position: absolute;\r\n  top: -0.5%;\r\n  left: 102%;\r\n  cursor: pointer;\r\n  width: 25px;\r\n  height: 25px;\r\n  &::before{\r\n    @include cross;\r\n    transform: rotate(45deg)\r\n  }\r\n  &::after{\r\n    @include cross;\r\n    transform: rotate(-45deg)\r\n  }\r\n  &:hover::before{\r\n    transform: rotate(-45deg);\r\n    background: indianred\r\n  }\r\n  &:hover::after {\r\n    transform: rotate(-135deg);\r\n    background: indianred\r\n  }\r\n}","footer {\r\n  width: 100%;\r\n  height: 40px;\r\n  background: #0E4447;\r\n  padding: 12px 290px;\r\n}\r\n\r\nfooter div {\r\n  font-size: 14px;\r\n  text-align: center;\r\n  color: #F4F4F4;\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -10946,11 +11024,11 @@ _global["default"]._babelPolyfill = true;
   \************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _scss_main_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../scss/main.scss */ "./src/scss/main.scss");
-/* harmony import */ var _filters__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./filters */ "./src/js/filters.js");
-/* harmony import */ var _fetchData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./fetchData */ "./src/js/fetchData.js");
-/* harmony import */ var _usualCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./usualCard */ "./src/js/usualCard.js");
-/* harmony import */ var _bigCard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./bigCard */ "./src/js/bigCard.js");
-/* harmony import */ var _Buttons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Buttons */ "./src/js/Buttons.js");
+/* harmony import */ var _fetchData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fetchData */ "./src/js/fetchData.js");
+/* harmony import */ var _usualCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./usualCard */ "./src/js/usualCard.js");
+/* harmony import */ var _filters__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./filters */ "./src/js/filters.js");
+/* harmony import */ var _reRender__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./reRender */ "./src/js/reRender.js");
+/* harmony import */ var _acceptReject__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./acceptReject */ "./src/js/acceptReject.js");
 
 
 
@@ -10958,21 +11036,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-(0,_fetchData__WEBPACK_IMPORTED_MODULE_2__.getBearsData)().then(function () {
-  _filters__WEBPACK_IMPORTED_MODULE_1__.filterDrop();
-  _filters__WEBPACK_IMPORTED_MODULE_1__.filterContentDrop();
-  (0,_usualCard__WEBPACK_IMPORTED_MODULE_3__.renderCard)();
-  var requestsSection = document.querySelector('.requests__cards');
-  var bigCardSection = document.querySelector('.bigCard');
-  _fetchData__WEBPACK_IMPORTED_MODULE_2__.bearsArr.forEach(function (item) {
-    (0,_bigCard__WEBPACK_IMPORTED_MODULE_4__.renderBigCard)(item, bigCardSection);
-    (0,_Buttons__WEBPACK_IMPORTED_MODULE_5__.buttons)(item, requestsSection);
-  });
-  (0,_filters__WEBPACK_IMPORTED_MODULE_1__.filterForAcceptReject)(requestsSection);
+(0,_fetchData__WEBPACK_IMPORTED_MODULE_1__.getBearsData)().then(function () {
+  (0,_usualCard__WEBPACK_IMPORTED_MODULE_2__.renderCard)();
+  (0,_reRender__WEBPACK_IMPORTED_MODULE_4__.reRender)();
+  (0,_filters__WEBPACK_IMPORTED_MODULE_3__.filterDrop)();
+  (0,_filters__WEBPACK_IMPORTED_MODULE_3__.filterContentDrop)();
+  (0,_acceptReject__WEBPACK_IMPORTED_MODULE_5__.acceptedFilter)();
+  (0,_acceptReject__WEBPACK_IMPORTED_MODULE_5__.rejectedFilter)();
 });
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=main.b51fbcd9e87fd74c6a9a.js.map
+//# sourceMappingURL=main.84dff60627b352e358d2.js.map
