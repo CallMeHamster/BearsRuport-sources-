@@ -5,7 +5,7 @@ import {renderBigCard} from "./bigCard";
 
 const accepted = document.querySelector('.requests__filter--accepted')
 const rejected = document.querySelector('.requests__filter--rejected')
-
+const promo = document.querySelector('.requests__promo')
 export function acceptedFilter() {
     accepted.addEventListener('click', () => {
         document.querySelector('.requests__checkbox').classList.remove('requests__checkbox--active')
@@ -14,6 +14,7 @@ export function acceptedFilter() {
         if ((!accepted.classList.contains(`requests__filter-node--active`) && !rejected.classList.contains(`requests__filter-node--active`)) || (!accepted.classList.contains('requests__filter-node--active') && rejected.classList.contains('requests__filter-node--active'))) {
             accepted.classList.add(`requests__filter-node--active`)
             rejected.classList.remove('requests__filter-node--active')
+            promo.textContent = accepted.textContent
             const acceptedBears = bearsArr.filter(item => item.state === 'accepted')
             const structure = acceptedBears.reduce((acc, item) => acc + structureCard(item), '')
             requests.innerHTML = structure
@@ -32,6 +33,7 @@ export function acceptedFilter() {
             requests.innerHTML = structure
             accepted.classList.remove(`requests__filter-node--active`)
             rejected.classList.remove(`requests__filter-node--active`)
+            promo.textContent = 'Поступившие заявки'
             reRender()
         }
     })
@@ -45,6 +47,7 @@ export function rejectedFilter() {
         if ((!rejected.classList.contains(`requests__filter-node--active`) && !accepted.classList.contains(`requests__filter-node--active`)) || (!rejected.classList.contains('requests__filter-node--active') && accepted.classList.contains('requests__filter-node--active'))) {
             rejected.classList.add(`requests__filter-node--active`)
             accepted.classList.remove('requests__filter-node--active')
+            promo.textContent = rejected.textContent
             const rejectedBears = bearsArr.filter(item => item.state === 'rejected')
             const structure = rejectedBears.reduce((acc, item) => acc + structureCard(item), '')
             requests.innerHTML = structure
@@ -63,6 +66,7 @@ export function rejectedFilter() {
             requests.innerHTML = structure
             rejected.classList.remove(`requests__filter-node--active`)
             accepted.classList.remove(`requests__filter-node--active`)
+            promo.textContent = 'Поступившие заявки'
             reRender()
         }
     })

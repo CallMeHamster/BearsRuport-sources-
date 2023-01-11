@@ -9,9 +9,9 @@ const structureCard = (item) => `
             <img src=${item.image_url} alt="#">
         </div>
         <div class="requests__cards-descr">
-            <div class="requests__bearName--reserve">${item.name}</div> 
-            <div class="requests__bearTypeNGender--reserve">${item.type}</div>
-            <div class="requests__bearTypeNGender--reserve">${item.gender}</div>
+            <div class="requests__bearName requests__bearName--reserve">${item.name}</div> 
+            <div class="requests__bearTypeNGender requests__bearTypeNGender--reserve">${item.type}</div>
+            <div class="requests__bearTypeNGender requests__bearTypeNGender--reserve">${item.gender}</div>
         </div>
         ${item.state ? '' : `
         <div class="requests__cards-btns">

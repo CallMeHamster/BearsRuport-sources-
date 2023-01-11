@@ -1,0 +1,215 @@
+@media (max-width: 1199px) {
+  header {
+    padding-left: 30px;
+  }
+  .container {
+    padding: 20px 100px 0 100px;
+  }
+}
+
+@media (max-width: 991px) {
+  .wrapperForNavigation {
+    align-items: center;
+  }
+
+  .container {
+    padding: 20px 50px 0 50px;
+  }
+
+  .btn--accept {
+    width: 160px;
+    height: 28px;
+    font-size: 13px;
+  }
+
+  .btn--reject {
+    width: 160px;
+    height: 28px;
+    font-size: 13px;
+  }
+
+  .requests {
+    &__promo {
+      font-size: 18px;
+    }
+    &__reserve {
+      margin-right: 20px;
+    }
+    &__text {
+      font-size: 13px;
+    }
+    &__cards {
+      margin-top: 25px;
+    }
+    &__bearName {
+      font-size: 16px;
+    }
+    &__bearTypeNGender {
+      font-size: 12px;
+    }
+    &__reserveText {
+      left: 20%;
+      font-size: 17px;
+    }
+    &__filter-button {
+      width: 190px;
+    }
+    &__button-text {
+      font-size: 13px;
+    }
+    &__filter-content {
+      min-width: 190px;
+    }
+    &__filter-node {
+      font-size: 13px;
+    }
+    &__cards-card {
+      height: 360px;
+      width: 200px;
+    }
+    &__cards-descr {
+      padding-top: 10px
+    }
+  }
+
+  footer {
+    padding: 12px 230px;
+  }
+}
+
+@media (max-width: 767px) {
+  header {
+    padding-left: 5px;
+  }
+
+  .container {
+    padding: 20px 25px 0 25px;
+  }
+
+  .requests {
+    &__promo {
+      font-size: 16px;
+    }
+    &__reserve {
+      margin-right: 10px;
+    }
+    &__text {
+      font-size: 12px;
+    }
+    &__filter-button {
+      width: 160px;
+      height: 28px;
+    }
+    &__button-text {
+      font-size: 12px;
+      padding: 3px;
+    }
+    &__filter-content {
+      min-width: 160px;
+    }
+    &__filter-node {
+      font-size: 12px;
+    }
+    &__cards-card {
+      height: 380px;
+      width: 230px;
+    }
+    &__cards-imgBlock {
+      height: 190px;
+    }
+  }
+
+  footer {
+    padding: 8px 145px;
+    height: 30px;
+    div {
+      font-size: 12px;
+    }
+  }
+}
+
+@media (max-width: 575px) {
+
+  .hamburger {
+    display: block;
+  }
+
+  .wrapperForReserve {
+    display: none
+  }
+  .wrapperForNavigation {
+    display: block;
+    text-align: center;
+  }
+  .container {
+    padding: 15px 5px 0 5px;
+  }
+  .requests {
+    &__promo {
+      position: relative;
+      font-size: 9vw;
+      background: linear-gradient(to left, #f69ec4, #f9dd94 100%);
+      background-position: 0 100%;
+      background-size: 100% 4px;
+      background-repeat: repeat-x;
+    }
+    &__cards {
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+
+    }
+    &__cards-card {
+      margin-right: 10px;
+    }
+    &__reserveText {
+      font-size: 20px;
+    }
+    &__bearName {
+      font-size: 25px;
+    }
+    &__bearTypeNGender {
+      font-size: 16px;
+    }
+    &__cards-btns {
+      margin-top: 20px;
+      .btn--accept, .btn--reject {
+        width: 180px;
+        height: 32px;
+        font-size: 15px;
+      }
+    }
+  }
+
+  .bigCard {
+    width: 305px;
+  }
+  .cardDescr__imgBlock {
+    height: 305px;
+  }
+  .cardDescr_bearsInfo {
+    padding: 15px;
+  }
+  .cardDescr__btns {
+    padding-top: 10px;
+    .btn--accept, .btn--reject {
+      width: 140px;
+      height: 32px;
+      font-size: 15px;
+    }
+  }
+
+  footer {
+    padding: 9px 35px;
+    div {
+      font-size: 10px
+    }
+  }
+
+}
+
+@media (max-width: 469px) {
+  .requests__cards-card{
+    margin-right: 0;
+  }
+}

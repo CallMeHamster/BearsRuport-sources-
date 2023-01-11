@@ -9,17 +9,13 @@ function filterDrop() {
     const rejected = document.querySelector('.requests__filter--rejected')
     checkBox.addEventListener('click', () => {
         const checkMark = document.querySelector('.requests__checkmark')
-        if (!checkMark.classList.contains('requests__checkmark--active')) {
+        if (!checkBox.classList.contains('requests__checkbox--active')) {
             checkBox.classList.add('requests__checkbox--active')
             checkMark.classList.add('requests__checkmark--active')
             const allBears = document.querySelectorAll('.requests__cards-card')
             const reserveBears = document.querySelectorAll('.requests__cards-card--reserve')
             allBears.forEach(item => requests.removeChild(item))
             reserveBears.forEach(item => requests.appendChild(item))
-
-            /*bearsArr.filter(item => !item.in_reserve && !item.state).forEach(item => {
-                requests.removeChild(item.node)
-            })*/
         }
         else {
             checkMark.classList.remove('requests__checkmark--active')
@@ -45,11 +41,24 @@ function filterDrop() {
 
 function filterContentDrop() {
     const dropDownButton = document.querySelector('.requests__filter');
+    const filter = document.querySelector('.requests__filter-content')
+    const arrow = document.querySelector('.requests__button-arrow')
+
     dropDownButton.addEventListener('click', () => {
-        document.querySelector('.requests__filter-content')
-            .classList.toggle('requests__filter-content--active');
-        document.querySelector('.requests__button-arrow')
-            .classList.toggle('requests__button-arrow--active')
+        dropDownButton.classList.toggle('requests__filter--active')
+        filter.classList.toggle('requests__filter-content--active');
+        arrow.classList.toggle('requests__button-arrow--active')
+    })
+
+    window.addEventListener('click', e => {
+        if (dropDownButton.classList.contains('requests__filter--active')) {
+            const target = e.target
+            if (!target.closest('.requests__filter-content') && !target.closest('.requests__filter')) {
+                filter.classList.remove('requests__filter-content--active')
+                arrow.classList.remove('requests__button-arrow--active')
+                dropDownButton.classList.remove('requests__filter--active')
+            }
+        }
     })
 }
 

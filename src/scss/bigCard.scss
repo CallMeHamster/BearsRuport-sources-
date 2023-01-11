@@ -54,6 +54,9 @@
 .cardDescr__bearsInfo {
   padding: 20px 30px 30px 30px;
   font-size: 13.2px;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden
 }
 
 .cardDescr__bearName{

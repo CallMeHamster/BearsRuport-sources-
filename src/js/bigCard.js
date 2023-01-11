@@ -48,15 +48,29 @@ const structureBigCard = (item) => `
 const bigCard = document.querySelector('.bigCard')
 export function renderBigCard(item){
     bigCard.innerHTML = structureBigCard(item)
-    bigCard.classList.add('bigCard--active')
+
     document.body.classList.add('blur')
     closeOnButton()
+    bigCard.classList.add('bigCard--active')
 }
 
 function closeOnButton(){
     document.querySelector('.cardClose')
         .addEventListener('click', () => {
+            const bigCardWrapper = document.querySelector('.cardWrapper')
             bigCard.classList.remove('bigCard--active')
+            setTimeout(() => bigCard.removeChild(bigCardWrapper), 500)
             document.body.classList.remove('blur')
         })
+    window.addEventListener('click', e => {
+        if (bigCard.classList.contains('bigCard--active')){
+            const target = e.target
+            const bigCardWrapper = document.querySelector('.cardWrapper')
+            if (!target.closest('.bigCard') && !target.closest('.requests__cards-card')){
+                bigCard.classList.remove('bigCard--active')
+                setTimeout(() => bigCard.removeChild(bigCardWrapper), 500)
+                document.body.classList.remove('blur')
+            }
+        }
+    })
 }
