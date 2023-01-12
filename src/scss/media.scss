@@ -87,6 +87,7 @@
   }
 
   .requests {
+    min-height: calc(100vh - 90px);
     &__promo {
       font-size: 16px;
     }
@@ -134,20 +135,27 @@
     display: block;
   }
 
+  .hamburgerFilter {
+    display: flex
+  }
+
   .wrapperForReserve {
     display: none
   }
+
   .wrapperForNavigation {
     display: block;
     text-align: center;
   }
+
   .container {
     padding: 15px 5px 0 5px;
   }
+
   .requests {
     &__promo {
       position: relative;
-      font-size: 9vw;
+      font-size: 8vw;
       background: linear-gradient(to left, #f69ec4, #f9dd94 100%);
       background-position: 0 100%;
       background-size: 100% 4px;
@@ -157,7 +165,6 @@
       width: 100%;
       flex-direction: column;
       align-items: center;
-
     }
     &__cards-card {
       margin-right: 10px;
@@ -182,20 +189,33 @@
   }
 
   .bigCard {
-    width: 305px;
+    width: 80vw;
   }
+
   .cardDescr__imgBlock {
-    height: 305px;
+    height: 40vh;
   }
-  .cardDescr_bearsInfo {
-    padding: 15px;
+
+  .cardDescr__bearsInfo {
+    max-height: 40vh;
+    padding: 5px 20px 5px 20px;
+    font-size: 11.2px;
   }
+
+  .cardDescr__bearName {
+    font-size: 22px;
+  }
+
+  .cardDescr__bearTypeNGender {
+    font-size: 16px;
+  }
+
   .cardDescr__btns {
     padding-top: 10px;
     .btn--accept, .btn--reject {
-      width: 140px;
-      height: 32px;
-      font-size: 15px;
+      width: 40%;
+      height: 30px;
+      font-size: 13px;
     }
   }
 
@@ -208,7 +228,7 @@
 
 }
 
-@media (max-width: 469px) {
+@media (max-width: 469px){
   .requests__cards-card{
     margin-right: 0;
   }

@@ -34,6 +34,7 @@ export function bigButtons(item, section) {
         section.removeChild(item.node)
         bigCard.classList.remove('bigCard--active')
         document.body.classList.remove('blur')
+        document.body.style.overflow = 'auto'
     })
     buttonReject.addEventListener('click', () => {
         item.state = 'rejected'
@@ -44,5 +45,6 @@ export function bigButtons(item, section) {
         section.removeChild(item.node)
         bigCard.classList.remove('bigCard--active')
         document.body.classList.remove('blur')
+        document.body.style.overflow = 'auto'
     })
 }

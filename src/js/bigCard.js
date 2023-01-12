@@ -1,5 +1,3 @@
-import {bearsArr} from "./fetchData";
-
 const structureBigCard = (item) => `
     ${item.in_reserve
     ?
@@ -47,11 +45,11 @@ const structureBigCard = (item) => `
 
 const bigCard = document.querySelector('.bigCard')
 export function renderBigCard(item){
+    bigCard.classList.add('bigCard--active')
     bigCard.innerHTML = structureBigCard(item)
-
+    document.body.style.overflow = 'hidden'
     document.body.classList.add('blur')
     closeOnButton()
-    bigCard.classList.add('bigCard--active')
 }
 
 function closeOnButton(){
@@ -59,8 +57,13 @@ function closeOnButton(){
         .addEventListener('click', () => {
             const bigCardWrapper = document.querySelector('.cardWrapper')
             bigCard.classList.remove('bigCard--active')
-            setTimeout(() => bigCard.removeChild(bigCardWrapper), 500)
+            setTimeout(() => {
+                if (!bigCard.classList.contains('bigCard--active')){
+                    bigCard.removeChild(bigCardWrapper)
+                }
+            }, 500)
             document.body.classList.remove('blur')
+            document.body.style.overflow = 'auto'
         })
     window.addEventListener('click', e => {
         if (bigCard.classList.contains('bigCard--active')){
@@ -68,8 +71,13 @@ function closeOnButton(){
             const bigCardWrapper = document.querySelector('.cardWrapper')
             if (!target.closest('.bigCard') && !target.closest('.requests__cards-card')){
                 bigCard.classList.remove('bigCard--active')
-                setTimeout(() => bigCard.removeChild(bigCardWrapper), 500)
+                setTimeout(() => {
+                    if (!bigCard.classList.contains('bigCard--active')){
+                        bigCard.removeChild(bigCardWrapper)
+                    }
+                }, 500)
                 document.body.classList.remove('blur')
+                document.body.style.overflow = 'auto'
             }
         }
     })

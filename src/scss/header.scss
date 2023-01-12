@@ -33,26 +33,62 @@ header {
     }
   }
   &Filter {
-    display: flex;
+    display: none;
     flex-direction: column;
-    justify-content: space-around;
     align-items: center;
     position: fixed;
-    width: 70%;
+    width: 240px;
     top: 0;
-    left: -100%;
-    height: 100%;
+    margin-left: -100%;
+    height: 101%;
+    font-size: 16px;
     background-color: rgba(0, 0, 0, 0.9);
-    transition: 0.5s;
+    transition: visibility, margin-left 0.5s;
     z-index: 2;
     &--active {
-      left: 0
+      margin-left: -5px;
+    }
+
+    &__main{
+      position: absolute;
+      top: 10px;
+      color: #FEED7E;
+      border: 2px solid;
+      padding: 0 7%;
+      font-size: 20px;
+    }
+
+    &--accepted {
+      position: relative;
+      margin: 50% 0 30% 0;
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: -5px;
+        left: -10%;
+        width: 2px;
+        height: 100px;
+        background-color: white;
+      }
+    }
+
+    &__node {
+      color: #E7E7E7;
+      &--active {
+        color: #FEED7E;
+      }
+    }
+
+    &__reserve {
+      color: #E7E7E7;
+      margin-top: 40%;
+      font-size: 18px;
+      &--active{
+        color: #FEED7E;
+      }
     }
   }
-  &Filter__reserve, &Filter__main, &Filter__accepted, &Filter__rejected {
-    color: white;
-  }
-
 }
 
 .header__text {

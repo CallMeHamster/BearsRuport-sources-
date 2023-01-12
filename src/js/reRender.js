@@ -3,13 +3,11 @@ import {renderBigCard} from "./bigCard";
 import {buttons} from "./Buttons";
 import {bigButtons} from "./Buttons";
 
-export function reRender(){
+function reRender(acceptedNode, rejectedNode){
     const nodes = document.querySelectorAll('.requests__cards-card')
     const requests = document.querySelector('.requests__cards')
-    const accepted = document.querySelector('.requests__filter--accepted')
-    const rejected = document.querySelector('.requests__filter--rejected')
     let i = 0;
-    if (!accepted.classList.contains('requests__filter-node--active') && !rejected.classList.contains('requests__filter-node--active')) {
+    if (!acceptedNode.classList.contains(`${acceptedNode.classList[1]}--active`) && !rejectedNode.classList.contains(`${rejectedNode.classList[1]}--active`)) {
         bearsArr.filter(item => !item.state).forEach(item => {
             item.node = nodes[i]
             item.node.querySelector('.requests__cards-imgBlock').addEventListener('click', () => {
@@ -20,7 +18,7 @@ export function reRender(){
             i++
         })
     }
-    else if (accepted.classList.contains('requests__filter-node--active') && !rejected.classList.contains('requests__filter-node--active')){
+    else if (acceptedNode.classList.contains(`${acceptedNode.classList[1]}--active`) && !rejectedNode.classList.contains(`${rejectedNode.classList[1]}--active`)){
         bearsArr.filter(item => item.state === 'accepted').forEach(item => {
             item.node = nodes[i]
             item.node.querySelector('.requests__cards-imgBlock').addEventListener('click', () => {
@@ -37,5 +35,21 @@ export function reRender(){
             })
             i++
         })
+    }
+}
+
+export function cardFunctional() {
+    const desktopAccepted = document.querySelector('.requests__filter--accepted')
+    const desktopRejected = document.querySelector('.requests__filter--rejected')
+
+    const mobileAccepted = document.querySelector('.hamburgerFilter--accepted')
+    const mobileRejected = document.querySelector('.hamburgerFilter--rejected')
+
+    if( window.innerWidth >= 576 ) {
+        reRender(desktopAccepted, desktopRejected)
+    }
+
+    if( window.innerWidth < 576 ){
+        reRender(mobileAccepted, mobileRejected)
     }
 }
