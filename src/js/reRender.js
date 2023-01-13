@@ -45,11 +45,8 @@ export function cardFunctional() {
     const mobileAccepted = document.querySelector('.hamburgerFilter--accepted')
     const mobileRejected = document.querySelector('.hamburgerFilter--rejected')
 
-    if( window.innerWidth >= 576 ) {
+    window.innerWidth >= 576 ?
         reRender(desktopAccepted, desktopRejected)
-    }
-
-    if( window.innerWidth < 576 ){
+    :
         reRender(mobileAccepted, mobileRejected)
-    }
 }

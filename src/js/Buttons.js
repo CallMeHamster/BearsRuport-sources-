@@ -8,7 +8,8 @@ export function buttons(item, section) {
             method: 'POST',
             body: JSON.stringify(item.id)
         })
-        section.removeChild(item.node)
+        buttonAccept.style.border = '5px solid green'
+        setTimeout(()=>section.removeChild(item.node),150)
     })
     buttonReject.addEventListener('click', () => {
         item.state = 'rejected'
@@ -16,7 +17,8 @@ export function buttons(item, section) {
             method: 'POST',
             body: JSON.stringify(item.id)
         })
-        section.removeChild(item.node)
+        buttonReject.style.border = '5px solid red'
+        setTimeout(()=>section.removeChild(item.node),150)
     })
 }
 
@@ -37,6 +39,7 @@ export function bigButtons(item, section) {
         document.body.style.overflow = 'auto'
     })
     buttonReject.addEventListener('click', () => {
+        buttonReject.style.background = 'red'
         item.state = 'rejected'
         fetch('https://private-9d5e37a-testassignment.apiary-mock.com/reject-bear', {
             method: 'POST',

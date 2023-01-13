@@ -115,17 +115,16 @@ export function clickOnBothFilter () {
     const mobileAccepted = document.querySelector('.hamburgerFilter--accepted')
     const mobileRejected = document.querySelector('.hamburgerFilter--rejected')
 
-    if( window.innerWidth >= 576 ) {
-        filterContentDrop(desktopBtn, desktopBtnChildren)
-        reserveFilter(desktopReserve, desktopAccepted, desktopRejected)
-        acceptedAndRejectedFilters(desktopAccepted, desktopRejected, desktopReserve)
+    window.innerWidth >= 576 ? (
+        filterContentDrop(desktopBtn, desktopBtnChildren),
+        reserveFilter(desktopReserve, desktopAccepted, desktopRejected),
+        acceptedAndRejectedFilters(desktopAccepted, desktopRejected, desktopReserve),
         acceptedAndRejectedFilters(desktopRejected, desktopAccepted, desktopReserve)
-    }
-
-    if( window.innerWidth < 576 ){
-        filterContentDrop(hamburgerBtn, hamburgerChildren)
-        reserveFilter(mobileReserve, mobileAccepted, mobileRejected)
-        acceptedAndRejectedFilters(mobileAccepted, mobileRejected, mobileReserve)
+        )
+    : (
+        filterContentDrop(hamburgerBtn, hamburgerChildren),
+        reserveFilter(mobileReserve, mobileAccepted, mobileRejected),
+        acceptedAndRejectedFilters(mobileAccepted, mobileRejected, mobileReserve),
         acceptedAndRejectedFilters(mobileRejected, mobileAccepted, mobileReserve)
-    }
+        )
 }
